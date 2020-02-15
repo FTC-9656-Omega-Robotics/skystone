@@ -39,6 +39,11 @@ import java.util.List;
 public abstract class SampleMecanumDriveBase extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    /* Heading PID Possible value (based on turnPID for our own methods)
+      turnPID = new OmegaPID(0.25, 0, 0.36); //0.015, 0.00008, 0.05 work for robotSpeed = 0.6. now tuning for 1.0
+      Possible translational PID (probably not well tuned)
+      drivePID = new OmegaPID(0.45, 0, 0.395);//.25, .0001, .08 has some jitters
+     */
 
 
     public enum Mode {
