@@ -38,7 +38,12 @@ public class DriveConstants {
      */
     public static final boolean RUN_USING_ENCODER = true;
     public static final PIDCoefficients MOTOR_VELO_PID = new PIDCoefficients(0,0,0);
-    //for later tuning
+    /*Velocity PID helps drive motors maintain a certain velocity
+     for later tuning, Ideally keep I at 0.
+     Some discord tuned values if we run out of time/need a starting point
+     our velocity pid is kp = 50, ki = 0.05 kd = 15
+     */
+
 
     /*
      * These are physical constants that can be determined from your robot (including the track
