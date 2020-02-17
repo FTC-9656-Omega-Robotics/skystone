@@ -42,6 +42,7 @@ public class DriveConstants {
      for later tuning, Ideally keep I at 0.
      Some discord tuned values if we run out of time/need a starting point
      our velocity pid is kp = 50, ki = 0.05 kd = 15
+     For reference, my p = 38, i =0.8 and d=16 on a 28 lbs robot.
      */
 
 
