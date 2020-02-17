@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.qualcomm.hardware.motors.GoBILDA5202Series;
-import com.qualcomm.hardware.motors.Matrix12vMotor;
 import com.qualcomm.hardware.motors.NeveRest20Gearmotor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -29,8 +28,7 @@ public class DriveConstants {
      * @DeviceProperties and @MotorType annotations.
      */
     private static final MotorConfigurationType MOTOR_CONFIG =
-            MotorConfigurationType.getMotorType(Matrix12vMotor.class);
-
+            MotorConfigurationType.getMotorType(GoBILDA5202Series.class);
 
     /*
      * Set the first flag appropriately. If using the built-in motor velocity PID, update
@@ -38,13 +36,6 @@ public class DriveConstants {
      */
     public static final boolean RUN_USING_ENCODER = true;
     public static final PIDCoefficients MOTOR_VELO_PID = new PIDCoefficients(0,0,0);
-    /*Velocity PID helps drive motors maintain a certain velocity
-     for later tuning, Ideally keep I at 0.
-     Some discord tuned values if we run out of time/need a starting point
-     our velocity pid is kp = 50, ki = 0.05 kd = 15
-     For reference, my p = 38, i =0.8 and d=16 on a 28 lbs robot.
-     */
-
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -55,7 +46,7 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.9685;
-    public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
+    public static double GEAR_RATIO = 99.5/19.2; // output (wheel) speed / input (motor) speed
     public static double TRACK_WIDTH = 14.8425;
 
     /*
@@ -64,7 +55,7 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 1.0 / rpmToVelocity(312.0);
+    public static double kV = 1.0 / rpmToVelocity(getMaxRpm());
     public static double kA = 0;
     public static double kStatic = 0;
 
@@ -80,6 +71,7 @@ public class DriveConstants {
      * Ticks per rev: 537.6
      * Max RPM: 312
      */
+     */
     public static DriveConstraints BASE_CONSTRAINTS = new DriveConstraints(
             30.0, 30.0, 0.0,
             Math.toRadians(180.0), Math.toRadians(180.0), 0.0
@@ -87,7 +79,7 @@ public class DriveConstants {
 
 
     public static double encoderTicksToInches(double ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / 537.6;
+        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / MOTOR_CONFIG.getTicksPerRev();
     }
 
     public static double rpmToVelocity(double rpm) {
@@ -95,13 +87,13 @@ public class DriveConstants {
     }
 
     public static double getMaxRpm() {
-        return 312 *
+        return MOTOR_CONFIG.getMaxRPM() *
                 (RUN_USING_ENCODER ? MOTOR_CONFIG.getAchieveableMaxRPMFraction() : 1.0);
     }
 
     public static double getTicksPerSec() {
         // note: MotorConfigurationType#getAchieveableMaxTicksPerSecond() isn't quite what we want
-        return (312 * 537.6 / 60.0);
+        return (MOTOR_CONFIG.getMaxRPM() * MOTOR_CONFIG.getTicksPerRev() / 60.0);
     }
 
     public static double getMotorVelocityF() {
