@@ -3,6 +3,7 @@ dependencies {
     implementation (name: 'RobotCore-release', ext: 'aar')
     implementation (name: 'Hardware-release', ext: 'aar')
     implementation (name: 'FtcCommon-release', ext: 'aar')
+
     implementation (name: 'WirelessP2p-release', ext: 'aar')
     implementation (name: 'tfod-release', ext: 'aar')
     implementation (name: 'tensorflow-lite-0.0.0-nightly', ext: 'aar')
@@ -15,4 +16,6 @@ dependencies {
     implementation 'com.acmerobotics.dashboard:dashboard:0.3.7'
 
     implementation 'org.openftc:rev-extensions-2:1.2'
+
+    implementation 'com.github.dogecv:dogecv:2020.4-alpha'
 }
