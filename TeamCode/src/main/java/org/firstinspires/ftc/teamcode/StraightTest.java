@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "StraightTest")
-//@Disabled
+@Autonomous(name = "OmegaStraightTest")
+@Disabled
 public class StraightTest extends LinearOpMode {
     OmegaBot robot;
     MotionMethods motionMethods;
