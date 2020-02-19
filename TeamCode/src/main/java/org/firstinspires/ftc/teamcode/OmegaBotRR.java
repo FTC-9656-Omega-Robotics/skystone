@@ -42,8 +42,8 @@ public class OmegaBotRR {
     public Servo centerGripper;
     public Servo cap;//0.41 open, 0.05 closed, this is actually elbow gripper
     public Servo rightGripper;//0.33 up, 0 down
-    public Servo elbowGripper;//this is actually capstone, its just that i configged wrong
-    public Servo frontElbow;
+    public Servo elbowGripper;//this is actually capstone, its just that is configured wrong
+    public Servo frontElbow;//no positions yet
     public Servo frontWrist;//.91 open, .56 closed
     public Servo capstone;//.9 holding the capstone, .28 dropping the capstone
     public ColorSensor sensorColor;
@@ -84,8 +84,10 @@ public class OmegaBotRR {
         // and named "imu1".
 
 
-        arm.setTargetPosition(0);
+        //Initialize arms and servos
+        arm.setTargetPosition(-200);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(.5);
 
 
         /**
