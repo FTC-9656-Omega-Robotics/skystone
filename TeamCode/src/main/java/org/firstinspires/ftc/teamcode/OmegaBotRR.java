@@ -26,28 +26,29 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  */
 
 public class OmegaBotRR {
-    //telemetry an hardwaremap come from each opmode
+    // telemetry and hardwaremap come from each opmode
     public Telemetry telemetry;
     public HardwareMap hardwareMap;
 
-    //DC motors we want
+    // DC motors
     public DcMotorEx arm;
-    public DcMotor extension;
     public DcMotor leftIntake;
     public DcMotor rightIntake;
 
-    //servos we want
-    public Servo pivot;
-    public Servo blockGripper;
-    public Servo centerGripper;
-    public Servo cap;//0.41 open, 0.05 closed, this is actually elbow gripper
-    public Servo rightGripper;//0.33 up, 0 down
-    public Servo elbowGripper;//this is actually capstone, its just that is configured wrong
-    public Servo frontElbow;//no positions yet
-    public Servo frontWrist;//.91 open, .56 closed
-    public Servo capstone;//.9 holding the capstone, .28 dropping the capstone
+    // servos
+    public Servo blockRotator; // rotates block gripper
+    public Servo blockGripper; // opens/closes claw
+    public Servo foundationGripper; // foundation gripper
+    public Servo sideBackGripper; //0.41 open, 0.05 closed
+    public Servo sideBackElbow; //0.33 up, 0 down
+    public Servo sideFrontElbow; //no positions yet
+    public Servo sideFrontGripper; //.91 open, .56 closed
+    public Servo capstone; //.9 holding the capstone, .28 dropping the capstone
+
+    // sensors
     public ColorSensor sensorColor;
     public DistanceSensor sensorDistance;
+
     public int relativeLayoutId;
     public View relativeLayout;
 
@@ -66,19 +67,18 @@ public class OmegaBotRR {
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
 
 
-        pivot = hardwareMap.get(Servo.class, "pivot");
+        blockRotator = hardwareMap.get(Servo.class, "blockRotator");
         blockGripper = hardwareMap.get(Servo.class, "block_gripper");
-        centerGripper = hardwareMap.get(Servo.class, "center_gripper");
-        cap = hardwareMap.get(Servo.class, "cap");
-        rightGripper = hardwareMap.get(Servo.class, "left_gripper");
-        frontElbow = hardwareMap.get(Servo.class, "front_elbow");
-        frontWrist = hardwareMap.get(Servo.class, "front_wrist");
+        foundationGripper = hardwareMap.get(Servo.class, "foundation_gripper");
+        sideBackGripper = hardwareMap.get(Servo.class, "side_back_gripper");
+        sideBackElbow = hardwareMap.get(Servo.class, "side_back_elbow");
+        sideFrontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
+        sideFrontGripper = hardwareMap.get(Servo.class, "side_front_gripper");
         capstone = hardwareMap.get(Servo.class, "capstone");
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color_distance_sensor");
         sensorColor = hardwareMap.get(ColorSensor.class, "color_distance_sensor");
         relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-        elbowGripper = hardwareMap.get(Servo.class, "capstone");//port number 5
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu1".
