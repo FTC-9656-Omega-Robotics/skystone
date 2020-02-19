@@ -46,7 +46,6 @@ public class OmegaBot {
     public Servo centerGripper;
     public Servo cap;//0.41 open, 0.05 closed, this is actually elbow gripper
     public Servo rightGripper;//0.33 up, 0 down
-    public Servo elbowGripper;//this is actually capstone, its just that i configged wrong
     public Servo frontElbow;
     public Servo frontWrist;//.91 open, .56 closed
     public Servo capstone;//.9 holding the capstone, .28 dropping the capstone
@@ -100,7 +99,6 @@ public class OmegaBot {
         sensorColor = hardwareMap.get(ColorSensor.class, "color_distance_sensor");
         relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-        elbowGripper = hardwareMap.get(Servo.class, "capstone");//port number 5
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu1".

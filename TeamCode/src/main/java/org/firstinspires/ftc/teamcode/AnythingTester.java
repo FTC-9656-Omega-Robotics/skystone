@@ -120,11 +120,11 @@ public class AnythingTester extends LinearOpMode {
         motionMethods.moveMotionProfile(25,1);
 */
 
-        robot.elbowGripper.setPosition(1);
+        robot.capstone.setPosition(1);
         //elbow down
         sleep(1000);
 
-        robot.elbowGripper.setPosition(0);
+        robot.capstone.setPosition(0);
         //elbow up
         sleep(1000);
 
