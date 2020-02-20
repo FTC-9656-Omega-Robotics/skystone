@@ -36,14 +36,37 @@ public class OmegaBotRR {
     public DcMotor rightIntake;
 
     // servos
-    public Servo blockRotator; // rotates block gripper
-    public Servo blockGripper; // opens/closes claw
-    public Servo foundationGripper; // foundation gripper
-    public Servo sideBackGripper; //0.41 open, 0.05 closed
-    public Servo sideBackElbow; //0.33 up, 0 down
-    public Servo sideFrontElbow; //no positions yet
-    public Servo sideFrontGripper; //.91 open, .56 closed
-    public Servo capstone; //.9 holding the capstone, .28 dropping the capstone
+    public Servo blockRotator; // rotates block gripper on arm
+    public Servo blockGripper; // opens/closes gripper on arm
+
+    public Servo foundationGripper;
+
+    public Servo sideBackGripper; // open/closes side back gripper
+    public Servo sideBackElbow; // moves side back gripper up/down
+
+    public Servo sideFrontGripper; // open/closes side front gripper
+    public Servo sideFrontElbow; // moves side front gripper up/down
+
+    public Servo capstone;
+
+    // servo position constants
+    final double SIDE_BACK_GRIPPER_OPEN = 0.41;
+    final double SIDE_BACK_GRIPPER_CLOSED = 0.05;
+
+    final double SIDE_BACK_ELBOW_UP = 0.33;
+    final double SIDE_BACK_ELBOW_DOWN = 0;
+
+    final double SIDE_FRONT_GRIPPER_OPEN = 0.91;
+    final double SIDE_FRONT_GRIPPER_CLOSED = 0.56;
+
+    final double CAPSTONE_HELD = 0.9;
+    final double CAPSTONE_DROPPED = 0.28;
+
+    // UNKNOWN POSITIONS - check what position each number corresponds to
+    // values from LinearTeleop.servoProcess()
+    // block rotator positions: 0.62 [?], 0.96 [?]
+    // block gripper positions: 0.5 [?], 0.2 [?]
+    // sideBackGripper positions: 0 [?], 0.5 [?]
 
     // sensors
     public ColorSensor sensorColor;
@@ -60,34 +83,55 @@ public class OmegaBotRR {
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
 
-
+        // Configure DcMotors with REV Expansion Hub
         arm = hardwareMap.get(DcMotorEx.class, "arm");
-        //extension = hardwareMap.get(DcMotor.class, "extension");
         leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
 
-
-        blockRotator = hardwareMap.get(Servo.class, "blockRotator");
+        // Configure servos with REV Expansion Hub
+        blockRotator = hardwareMap.get(Servo.class, "block_rotator");
         blockGripper = hardwareMap.get(Servo.class, "block_gripper");
+
         foundationGripper = hardwareMap.get(Servo.class, "foundation_gripper");
+
         sideBackGripper = hardwareMap.get(Servo.class, "side_back_gripper");
         sideBackElbow = hardwareMap.get(Servo.class, "side_back_elbow");
+
         sideFrontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
         sideFrontGripper = hardwareMap.get(Servo.class, "side_front_gripper");
+
         capstone = hardwareMap.get(Servo.class, "capstone");
+
+        // Configure sensors with REV Expansion Hub
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color_distance_sensor");
         sensorColor = hardwareMap.get(ColorSensor.class, "color_distance_sensor");
+
         relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-        // and named "imu1".
 
 
-        //Initialize arms and servos
+        // Initialize arm
         arm.setTargetPosition(-200);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(.5);
+
+        // Initialize servos
+        sideBackGripper.setPosition(SIDE_BACK_GRIPPER_CLOSED);
+        sideBackElbow.setPosition(SIDE_BACK_ELBOW_UP);
+
+        sideFrontGripper.setPosition(SIDE_FRONT_GRIPPER_CLOSED);
+
+        capstone.setPosition(CAPSTONE_HELD);
+
+        // Need to get servo position constants first, then uncomment stuff below
+        /*
+        blockRotator.setPosition(); // init position unknown
+        blockGripper.setPosition(BLOCK_GRIPPER_OPEN);
+        foundationGripper.setPosition(FOUNDATION_GRIPPER_UP);
+        sideFrontElbow.setPosition(SIDE_FRONT_ELBOW_UP);
+        */
+
+
 
 
         /**
