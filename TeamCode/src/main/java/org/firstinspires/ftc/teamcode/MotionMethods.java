@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -110,11 +109,11 @@ public class MotionMethods {
     public void movePID(double inches, double velocity) {
         DcMotor.RunMode originalMode = robot.frontLeft.getMode(); //Assume that all wheels have the same runmode
         robot.drivetrain.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        double target = robot.ticksPerInch * inches;
+        double target = robot.TICKS_PER_INCH * inches;
         robot.drivetrain.setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
         int count = 0;
         ElapsedTime runtime = new ElapsedTime();
-        while (opMode.opModeIsActive() && runtime.seconds() < robot.driveTimeLimitPer1Foot * inches / 12.0) {
+        while (opMode.opModeIsActive() && runtime.seconds() < robot.DRIVE_TIME_LIMIT_PER_1_FOOT * inches / 12.0) {
             robot.drivetrain.setVelocity(robot.drivePID.calculatePower(robot.drivetrain.getAvgEncoderValueOfFrontWheels(), target, -velocity, velocity));
             telemetry.addData("Count", count);
             telemetry.update();
