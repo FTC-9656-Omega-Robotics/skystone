@@ -107,8 +107,8 @@ public class OmegaBotRR {
         sideBackGripper = hardwareMap.get(Servo.class, "side_back_gripper");
         sideBackElbow = hardwareMap.get(Servo.class, "side_back_elbow");
 
-        sideFrontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
         sideFrontGripper = hardwareMap.get(Servo.class, "side_front_gripper");
+        sideFrontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
 
         capstone = hardwareMap.get(Servo.class, "capstone");
 
