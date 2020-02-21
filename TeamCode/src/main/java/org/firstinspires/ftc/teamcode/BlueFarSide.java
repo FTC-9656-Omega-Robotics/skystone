@@ -103,12 +103,12 @@ public class BlueFarSide extends LinearOpMode {
         }
         waitForStart();
 
-        // set initial values for arm, block gripper, pivot, and intakes
+        // set initial values for arm, block gripper, blockRotator, and intakes
         robot.arm.setTargetPosition(-400);
         robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.arm.setPower(.5);
         robot.blockGripper.setPosition(.75);
-        robot.pivot.setPosition(.62);
+        robot.blockRotator.setPosition(.62);
         sleep(500);
         robot.leftIntake.setPower(-1);
         robot.rightIntake.setPower(1);
@@ -159,7 +159,7 @@ public class BlueFarSide extends LinearOpMode {
         //grippers grip the waffle pan
 
         motionMethods.moveMotionProfile(39,1);
-        robot.centerGripper.setPosition(1.00);
+        robot.foundationGripper.setPosition(1.00);
         
         //arm moves down and drops the brick
         robot.arm.setTargetPosition(-1700);
@@ -180,7 +180,7 @@ public class BlueFarSide extends LinearOpMode {
         motionMethods.moveMotionProfile(39,1);
         //we wait a few seconds before moving the arm up
         sleep(500);
-        robot.centerGripper.setPosition(.51);
+        robot.foundationGripper.setPosition(.51);
         //turns to face quarry
 
         motionMethods.turnUsingPIDVoltageFieldCentric(90, .5);

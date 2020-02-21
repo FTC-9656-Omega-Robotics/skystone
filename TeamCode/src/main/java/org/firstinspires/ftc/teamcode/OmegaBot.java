@@ -41,13 +41,13 @@ public class OmegaBot {
     public DcMotor rightIntake;
 
     //servos we want
-    public Servo pivot;
+    public Servo blockRotator;
     public Servo blockGripper;
-    public Servo centerGripper;
-    public Servo cap;//0.41 open, 0.05 closed, this is actually elbow gripper
-    public Servo rightGripper;//0.33 up, 0 down
-    public Servo frontElbow;
-    public Servo frontWrist;//.91 open, .56 closed
+    public Servo foundationGripper;
+    public Servo sideBackGripper;//0.41 open, 0.05 closed, this is actually elbow gripper
+    public Servo sideBackElbow;//0.33 up, 0 down
+    public Servo sideFrontElbow;
+    public Servo sideFrontGripper;//.91 open, .56 closed
     public Servo capstone;//.9 holding the capstone, .28 dropping the capstone
     public ColorSensor sensorColor;
     public DistanceSensor sensorDistance;
@@ -87,13 +87,13 @@ public class OmegaBot {
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
 
 
-        pivot = hardwareMap.get(Servo.class, "block_rotator");
+        blockRotator = hardwareMap.get(Servo.class, "block_rotator");
         blockGripper = hardwareMap.get(Servo.class, "block_gripper");
-        centerGripper = hardwareMap.get(Servo.class, "foundation_gripper");
-        cap = hardwareMap.get(Servo.class, "side_back_gripper");
-        rightGripper = hardwareMap.get(Servo.class, "side_back_elbow");
-        frontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
-        frontWrist = hardwareMap.get(Servo.class, "side_front_gripper");
+        foundationGripper = hardwareMap.get(Servo.class, "foundation_gripper");
+        sideBackGripper = hardwareMap.get(Servo.class, "side_back_gripper");
+        sideBackElbow = hardwareMap.get(Servo.class, "side_back_elbow");
+        sideFrontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
+        sideFrontGripper = hardwareMap.get(Servo.class, "side_front_gripper");
         capstone = hardwareMap.get(Servo.class, "capstone");
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color_distance_sensor");
         sensorColor = hardwareMap.get(ColorSensor.class, "color_distance_sensor");

@@ -49,10 +49,10 @@ public class LinearTeleop extends LinearOpMode {
 
     public void flagWave(){
         if(count < 50){
-            robot.rightGripper.setPosition(0.3);
+            robot.sideBackElbow.setPosition(0.3);
             count++;
         }else if (count < 100){
-            robot.rightGripper.setPosition(0.35);
+            robot.sideBackElbow.setPosition(0.35);
             count++;
         }else{
             count = 0;
@@ -61,10 +61,10 @@ public class LinearTeleop extends LinearOpMode {
 
     public void servoProcess(){
         if(gamepad2.x){
-            robot.pivot.setPosition(0.62);
+            robot.blockRotator.setPosition(0.62);
 
         }else if(gamepad2.y){
-            robot.pivot.setPosition(.96);
+            robot.blockRotator.setPosition(.96);
         }
         if(gamepad2.right_bumper){
             robot.blockGripper.setPosition(.5);
@@ -72,18 +72,18 @@ public class LinearTeleop extends LinearOpMode {
             robot.blockGripper.setPosition(.2);
         }
         if(gamepad1.x){
-            robot.cap.setPosition(0);
+            robot.sideBackGripper.setPosition(0);
         }else if(gamepad1.y){
-            robot.cap.setPosition(0.5);
+            robot.sideBackGripper.setPosition(0.5);
         }
     }
 
     public void foundationGrippers(){
         if(gamepad1.left_trigger > 0.5){
-            robot.centerGripper.setPosition(1.00);
+            robot.foundationGripper.setPosition(1.00);
         }
         else if (gamepad1.right_trigger > 0.5){
-            robot.centerGripper.setPosition(0.51);
+            robot.foundationGripper.setPosition(0.51);
         }
     }
 

@@ -107,10 +107,10 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
                 waitForStart();
 
                 //Initialization for teleop/side gripper
-                robot.cap.setPosition(0.98);
-                robot.centerGripper.setPosition(0.55);
+                robot.sideBackGripper.setPosition(0.98);
+                robot.foundationGripper.setPosition(0.55);
                 //gripper to super open?
-                robot.rightGripper.setPosition(0.03);
+                robot.sideBackElbow.setPosition(0.03);
                 //elbow down
                 robot.arm.setTargetPosition(-200);
                 robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -127,13 +127,13 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
                 //double time = runtime.milliseconds();
                 //while(runtime.milliseconds()<time+700);
                 //intakes stone
-                robot.rightGripper.setPosition(0.03);
+                robot.sideBackElbow.setPosition(0.03);
                 //elbow down
                 sleep(400);
-                robot.cap.setPosition(.40);
+                robot.sideBackGripper.setPosition(.40);
                 //gripper closed
                 sleep(750);
-                robot.rightGripper.setPosition(.31);
+                robot.sideBackElbow.setPosition(.31);
                 //elbow up
                 sleep(500);
 
@@ -147,12 +147,12 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
                 //time for low voltage is .35
 
                 //dump on foundation
-                robot.rightGripper.setPosition(0.02);
+                robot.sideBackElbow.setPosition(0.02);
                 sleep(500);
                 //elbow down
-                robot.cap.setPosition(.98);
+                robot.sideBackGripper.setPosition(.98);
                 //gripper to super open?
-                robot.rightGripper.setPosition(.31);
+                robot.sideBackElbow.setPosition(.31);
                 //elbow up
 
                 //move to position to intake 2nd skystone
@@ -167,14 +167,14 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
                 motionMethods.turnUsingPIDVoltageFieldCentric(0,1 );
 
                 //final line up/intake of 2nd skystone
-                robot.rightGripper.setPosition(0.03);
+                robot.sideBackElbow.setPosition(0.03);
                 sleep(400);
                 motionMethods.strafe(180, .35, 0.5);
                 motionMethods.turnUsingPIDVoltageFieldCentric(0,1 );
-                robot.cap.setPosition(.40);
+                robot.sideBackGripper.setPosition(.40);
                 //gripper closed
                 sleep(800);
-                robot.rightGripper.setPosition(.31);
+                robot.sideBackElbow.setPosition(.31);
                 //elbow up
                 sleep(800);
 
@@ -190,16 +190,16 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
                 motionMethods.strafe(180, .30, 0.5);
                 motionMethods.turnUsingPIDVoltageFieldCentric(0,1);
                 sleep(100);
-                robot.rightGripper.setPosition(0.03);
+                robot.sideBackElbow.setPosition(0.03);
                 //elbow down
                 sleep(400);
-                robot.cap.setPosition(.98);
+                robot.sideBackGripper.setPosition(.98);
                 //gripper open
                 sleep(500);
-                robot.rightGripper.setPosition(.31);
+                robot.sideBackElbow.setPosition(.31);
                 //elbow up
                 sleep(200);
-                robot.centerGripper.setPosition(.85);
+                robot.foundationGripper.setPosition(.85);
                 sleep(100);
                 robot.drivetrain.reverseDirection();
                 motionMethods.moveMotionProfileReverse(7.5,1);
@@ -213,12 +213,12 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
                 robot.drivetrain.reverseDirection();
                 motionMethods.moveMotionProfileReverse(8,1);
                 robot.drivetrain.reverseDirection();
-                robot.centerGripper.setPosition(1);
+                robot.foundationGripper.setPosition(1);
                 sleep(200);
                 motionMethods.moveMotionProfile(24,1);
                 motionMethods.turnUsingPIDVoltageFieldCentric(-180,1);
                 sleep(300);
-                robot.centerGripper.setPosition(.55);
+                robot.foundationGripper.setPosition(.55);
                 sleep(700);
 
 

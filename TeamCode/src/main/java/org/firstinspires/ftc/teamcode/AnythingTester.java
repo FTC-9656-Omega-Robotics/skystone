@@ -102,20 +102,20 @@ public class AnythingTester extends LinearOpMode {
             telemetry.update();
         }
 
-        // set initial values for arm, block gripper, pivot, and intakes
+        // set initial values for arm, block gripper, blockRotator, and intakes
         robot.arm.setTargetPosition(-200);
         robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.arm.setPower(.5);
 
-        robot.centerGripper.setPosition(0.54);
+        robot.foundationGripper.setPosition(0.54);
         sleep(700);
 /*
 
-        robot.centerGripper.setPosition(1);
+        robot.foundationGripper.setPosition(1);
         sleep(200);
         motionMethods.moveMotionProfile(25,1);
         motionMethods.turnUsingPIDVoltageFieldCentric(-90,1);
-        robot.centerGripper.setPosition(.61);
+        robot.foundationGripper.setPosition(.61);
         sleep(500);
         motionMethods.moveMotionProfile(25,1);
 */
