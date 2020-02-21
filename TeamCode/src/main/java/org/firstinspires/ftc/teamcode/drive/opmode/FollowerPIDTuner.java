@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 @Autonomous(group = "drive")
 public class FollowerPIDTuner extends LinearOpMode {
     OmegaBotRR robot;
-    public static double DISTANCE = 48;
+    public static double DISTANCE = 20;
 
     @Override
     public void runOpMode() throws InterruptedException {
