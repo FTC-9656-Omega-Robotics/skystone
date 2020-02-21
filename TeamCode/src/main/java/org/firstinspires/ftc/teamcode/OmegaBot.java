@@ -26,31 +26,69 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  */
 
 public class OmegaBot {
-    //telemetry an hardwaremap come from each opmode
+    // telemetry an hardwaremap come from each opmode
     public Telemetry telemetry;
     public HardwareMap hardwareMap;
 
-    //DC motors we want
+    // DC motors
+    // wheels of drivetrain
     public DcMotorEx frontLeft;
     public DcMotorEx frontRight;
     public DcMotorEx backLeft;
     public DcMotorEx backRight;
+
     public DcMotorEx arm;
-    public DcMotor extension;
+
     public DcMotor leftIntake;
     public DcMotor rightIntake;
 
-    //servos we want
-    public Servo blockRotator;
-    public Servo blockGripper;
+    // servos
+    public Servo blockRotator; // rotates block gripper on arm
+    public Servo blockGripper; // opens/closes gripper on arm
+
     public Servo foundationGripper;
-    public Servo sideBackGripper;//0.41 open, 0.05 closed, this is actually elbow gripper
-    public Servo sideBackElbow;//0.33 up, 0 down
-    public Servo sideFrontElbow;
-    public Servo sideFrontGripper;//.91 open, .56 closed
-    public Servo capstone;//.9 holding the capstone, .28 dropping the capstone
+
+    public Servo sideBackGripper; // open/closes side back gripper
+    public Servo sideBackElbow; // moves side back gripper up/down
+
+    public Servo sideFrontGripper; // open/closes side front gripper
+    public Servo sideFrontElbow; // moves side front gripper up/down
+
+    public Servo capstone;
+
+    // servo position constants
+    static final double BLOCK_ROTATOR_STRAIGHT = 0.62; // STRAIGHT is position for using blockGripper to intake
+    static final double BLOCK_ROTATOR_ROTATED = 0.96; // rotated 90 degrees from STRAIGHT
+
+    static final double BLOCK_GRIPPER_OPEN = 0.5;
+    static final double BLOCK_GRIPPER_CLOSED = 0.2;
+
+    static final double FOUNDATION_GRIPPER_UP = 0.55;
+    static final double FOUNDATION_GRIPPER_DOWN = 1;
+
+    static final double SIDE_BACK_GRIPPER_OPEN = 0.41;
+    static final double SIDE_BACK_GRIPPER_CLOSED = 0.05;
+    static final double SIDE_BACK_GRIPPER_STOWED = 0.63; // stowed for robot inspection
+
+    static final double SIDE_BACK_ELBOW_UP = 0.31;
+    static final double SIDE_BACK_ELBOW_DOWN = 0;
+
+    static final double SIDE_FRONT_GRIPPER_OPEN = 0.91;
+    static final double SIDE_FRONT_GRIPPER_CLOSED = 0.56;
+    static final double SIDE_FRONT_GRIPPER_STOWED = 0.35; // stowed for robot inspection
+
+    static final double SIDE_FRONT_ELBOW_UP = 0.33;
+    static final double SIDE_FRONT_ELBOW_DOWN = 0;
+    //gripper sticks out, we will need a SIDE_FRONT_ELBOW_STOWED after phone is moved
+    // final double SIDE_FRONT_ELBOW_STOWED = [some value]; // stowed for robot inspection
+
+    final double CAPSTONE_HELD = 0.9;
+    final double CAPSTONE_DROPPED = 0.28;
+
+    // sensors
     public ColorSensor sensorColor;
     public DistanceSensor sensorDistance;
+
     public int relativeLayoutId;
     public View relativeLayout;
 
@@ -59,12 +97,12 @@ public class OmegaBot {
     public OmegaDriveTrain drivetrain;
 
     //3.937-inch diameter wheels, 1 wheel rotations per 1 motor rotation; all Yellow Jacket 19.2:1 motors for wheels (537.6 ticks per rev for 1:1); 27 inch turning diameter
-    final double ticksPerInch = (537.6 / 1.0) / (3.937 * Math.PI);
-    final double ticksPerDegree = ticksPerInch * 27 * Math.PI / 360.0 * (2.0 / 3); //2.0 / 3 is random scale factor
-    final double turnTolerance = 2; //2 degrees error tolerance
-    final double driveTolerance = 8;
-    final double turnTimeLimit = 2.5;
-    final double driveTimeLimitPer1Foot = 0.80; //1.5 sec per 12 inches
+    final double TICKS_PER_INCH = (537.6 / 1.0) / (3.937 * Math.PI);
+    final double TICKS_PER_DEGREE = TICKS_PER_INCH * 27 * Math.PI / 360.0 * (2.0 / 3); //2.0 / 3 is random scale factor
+    final double TURN_TOLERANCE = 2; //2 degrees error tolerance
+    final double DRIVE_TOLERANCE = 8;
+    final double TURN_TIME_LIMIT = 2.5;
+    final double DRIVE_TIME_LIMIT_PER_1_FOOT = 0.80; //1.5 sec per 12 inches
     Orientation lastAngles = new Orientation();
     BNO055IMU imu;//gyro
     public OmegaPID turnPID;
@@ -77,28 +115,38 @@ public class OmegaBot {
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
 
+        // Configure DcMotors with REV Expansion Hub
         frontLeft = hardwareMap.get(DcMotorEx.class, "front_left");
         frontRight = hardwareMap.get(DcMotorEx.class, "front_right");
         backLeft = hardwareMap.get(DcMotorEx.class, "back_left");
         backRight = hardwareMap.get(DcMotorEx.class, "back_right");
+
         arm = hardwareMap.get(DcMotorEx.class, "arm");
-        //extension = hardwareMap.get(DcMotor.class, "extension");
+
         leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
 
-
+        // Configure servos with REV Expansion Hub
         blockRotator = hardwareMap.get(Servo.class, "block_rotator");
         blockGripper = hardwareMap.get(Servo.class, "block_gripper");
+
         foundationGripper = hardwareMap.get(Servo.class, "foundation_gripper");
+
         sideBackGripper = hardwareMap.get(Servo.class, "side_back_gripper");
         sideBackElbow = hardwareMap.get(Servo.class, "side_back_elbow");
-        sideFrontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
+
         sideFrontGripper = hardwareMap.get(Servo.class, "side_front_gripper");
+        sideFrontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
+
         capstone = hardwareMap.get(Servo.class, "capstone");
+
+        // Configure sensors with REV Expansion Hub
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color_distance_sensor");
         sensorColor = hardwareMap.get(ColorSensor.class, "color_distance_sensor");
+
         relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu1".
@@ -112,6 +160,7 @@ public class OmegaBot {
 
         imu.initialize(parameters);
 
+        // Initialize drivetrain
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -132,13 +181,30 @@ public class OmegaBot {
         backLeft.setPower(0);
         backRight.setPower(0);
 
-        arm.setTargetPosition(0);
+        // Initialize arm
+        arm.setTargetPosition(-200);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(.5);
 
+        // Initialize servos
+        blockRotator.setPosition(BLOCK_ROTATOR_STRAIGHT);
+        blockGripper.setPosition(BLOCK_GRIPPER_OPEN);
+
+        foundationGripper.setPosition(FOUNDATION_GRIPPER_UP);
+
+        sideBackGripper.setPosition(SIDE_BACK_GRIPPER_STOWED);
+        sideBackElbow.setPosition(SIDE_BACK_ELBOW_UP);
+
+        sideFrontGripper.setPosition(SIDE_FRONT_GRIPPER_STOWED);
+        sideFrontElbow.setPosition(SIDE_FRONT_ELBOW_UP);
+
+        capstone.setPosition(CAPSTONE_HELD);
+
+        // Set up PID for drivetrain
         drivetrain = new OmegaDriveTrain(frontLeft, frontRight, backLeft, backRight);
         drivetrain.setRunMode(myRunMode);
-        turnPID = new OmegaPID(0.25, 0, 0.36, turnTolerance); //0.015, 0.00008, 0.05 work for robotSpeed = 0.6. now tuning for 1.0
-        drivePID = new OmegaPID(0.45, 0, 0.395, driveTolerance);//.25, .0001, .08 has some jitters
+        turnPID = new OmegaPID(0.25, 0, 0.36, TURN_TOLERANCE); //0.015, 0.00008, 0.05 work for robotSpeed = 0.6. now tuning for 1.0
+        drivePID = new OmegaPID(0.45, 0, 0.395, DRIVE_TOLERANCE);//.25, .0001, .08 has some jitters
     }//.25,.00008,.5
 
     /**
@@ -219,10 +285,10 @@ public class OmegaBot {
 
 
     public double getTicksPerInch() {
-        return ticksPerInch;
+        return TICKS_PER_INCH;
     }
 
     public double getTurnTolerance() {
-        return turnTolerance;
+        return TURN_TOLERANCE;
     }
 }
