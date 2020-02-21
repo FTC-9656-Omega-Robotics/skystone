@@ -50,39 +50,33 @@ public class OmegaBotRR {
     public Servo capstone;
 
     // servo position constants
-    final double SIDE_BACK_GRIPPER_STOWED = 0.63;
-    final double SIDE_BACK_GRIPPER_OPEN = 0.41;
-    final double SIDE_BACK_GRIPPER_CLOSED = 0.05;
+    final double BLOCK_ROTATOR_STRAIGHT = 0.62; // STRAIGHT is position for using blockGripper to intake
+    final double BLOCK_ROTATOR_ROTATED = 0.96; // rotated 90 degrees from STRAIGHT
 
-    final double SIDE_BACK_ELBOW_UP = 0.31;
-    final double SIDE_BACK_ELBOW_DOWN = 0;
-
-    final double SIDE_FRONT_GRIPPER_STOWED = 0.35;
-    final double SIDE_FRONT_GRIPPER_OPEN = 0.91;
-    final double SIDE_FRONT_GRIPPER_CLOSED = 0.56;
-
-    final double SIDE_FRONT_ELBOW_UP = 0.33; //gripper sticks out, we will need a SIDE_FRONT_ELBOW_STOWED after phone is moved
-    final double SIDE_FRONT_ELBOW_DOWN = 0;
-
-    final double CAPSTONE_HELD = 0.9;
-    final double CAPSTONE_DROPPED = 0.28;
-
-    final double BLOCK_GRIPPER_CLOSED = 0.2;
     final double BLOCK_GRIPPER_OPEN = 0.5;
-
-    final double BLOCK_ROTATOR_STRAIGHT = 0.62;
-    final double BLOCK_ROTATOR_ROTATED = 0.96;
+    final double BLOCK_GRIPPER_CLOSED = 0.2;
 
     final double FOUNDATION_GRIPPER_UP = 0.55;
     final double FOUNDATION_GRIPPER_DOWN = 1;
 
+    final double SIDE_BACK_GRIPPER_OPEN = 0.41;
+    final double SIDE_BACK_GRIPPER_CLOSED = 0.05;
+    final double SIDE_BACK_GRIPPER_STOWED = 0.63; // stowed for robot inspection
 
+    final double SIDE_BACK_ELBOW_UP = 0.31;
+    final double SIDE_BACK_ELBOW_DOWN = 0;
 
-    // UNKNOWN POSITIONS - check what position each number corresponds to
-    // values from LinearTeleop.servoProcess()
-    // block rotator positions: 0.62 [intaking/longwaysposition], 0.96 [rotated 90 degrees position]
-    // block gripper positions: 0.5 [open], 0.2 [closed]
-    // sideBackGripper positions: 0 [?], 0.5 [?]
+    final double SIDE_FRONT_GRIPPER_OPEN = 0.91;
+    final double SIDE_FRONT_GRIPPER_CLOSED = 0.56;
+    final double SIDE_FRONT_GRIPPER_STOWED = 0.35; // stowed for robot inspection
+
+    final double SIDE_FRONT_ELBOW_UP = 0.33;
+    final double SIDE_FRONT_ELBOW_DOWN = 0;
+    //gripper sticks out, we will need a SIDE_FRONT_ELBOW_STOWED after phone is moved
+    // final double SIDE_FRONT_ELBOW_STOWED = [some value]; // stowed for robot inspection
+
+    final double CAPSTONE_HELD = 0.9;
+    final double CAPSTONE_DROPPED = 0.28;
 
     // sensors
     public ColorSensor sensorColor;
