@@ -113,8 +113,8 @@ public class OmegaBotRR {
         capstone = hardwareMap.get(Servo.class, "capstone");
 
         // Configure sensors with REV Expansion Hub
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "distance_sensor");
-        sensorColor = hardwareMap.get(ColorSensor.class, "color_sensor");
+        sensorDistance = hardwareMap.get(DistanceSensor.class, "color_distance_sensor");
+        sensorColor = hardwareMap.get(ColorSensor.class, "color_distance_sensor");
 
         relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
