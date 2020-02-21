@@ -73,7 +73,7 @@ public class OmegaBot {
 
     double MOVE_CORRECTION_ADDENDUM = 0;
 
-    OmegaBot(Telemetry telemetry, HardwareMap hardwareMap) {
+    public OmegaBot(Telemetry telemetry, HardwareMap hardwareMap) {
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
 
@@ -87,13 +87,13 @@ public class OmegaBot {
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
 
 
-        pivot = hardwareMap.get(Servo.class, "pivot");
+        pivot = hardwareMap.get(Servo.class, "block_rotator");
         blockGripper = hardwareMap.get(Servo.class, "block_gripper");
-        centerGripper = hardwareMap.get(Servo.class, "center_gripper");
-        cap = hardwareMap.get(Servo.class, "cap");
-        rightGripper = hardwareMap.get(Servo.class, "left_gripper");
-        frontElbow = hardwareMap.get(Servo.class, "front_elbow");
-        frontWrist = hardwareMap.get(Servo.class, "front_wrist");
+        centerGripper = hardwareMap.get(Servo.class, "foundation_gripper");
+        cap = hardwareMap.get(Servo.class, "side_back_gripper");
+        rightGripper = hardwareMap.get(Servo.class, "side_back_elbow");
+        frontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
+        frontWrist = hardwareMap.get(Servo.class, "side_front_gripper");
         capstone = hardwareMap.get(Servo.class, "capstone");
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color_distance_sensor");
         sensorColor = hardwareMap.get(ColorSensor.class, "color_distance_sensor");
