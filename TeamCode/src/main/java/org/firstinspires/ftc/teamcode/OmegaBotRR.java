@@ -126,6 +126,11 @@ public class OmegaBotRR {
         arm.setPower(.5);
 
         // Initialize servos
+        blockRotator.setPosition(BLOCK_ROTATOR_STRAIGHT);
+        blockGripper.setPosition(BLOCK_GRIPPER_OPEN);
+
+        foundationGripper.setPosition(FOUNDATION_GRIPPER_UP);
+
         sideBackGripper.setPosition(SIDE_BACK_GRIPPER_STOWED);
         sideBackElbow.setPosition(SIDE_BACK_ELBOW_UP);
 
@@ -133,17 +138,6 @@ public class OmegaBotRR {
         sideFrontElbow.setPosition(SIDE_FRONT_ELBOW_UP);
 
         capstone.setPosition(CAPSTONE_HELD);
-
-        // Need to get servo position constants first, then uncomment stuff below
-
-        blockRotator.setPosition(BLOCK_ROTATOR_STRAIGHT);
-        blockGripper.setPosition(BLOCK_GRIPPER_OPEN);
-        foundationGripper.setPosition(FOUNDATION_GRIPPER_UP);
-        //sideFrontElbow.setPosition(SIDE_FRONT_ELBOW_UP);
-
-
-
-
 
         /**
          * Resets the cumulative angle tracking to zero.
