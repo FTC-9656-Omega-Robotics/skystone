@@ -46,6 +46,7 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.9685;
+    //Experimentally Determine a constant to make a correct distance
     public static double GEAR_RATIO = 99.5/19.2; // output (wheel) speed / input (motor) speed
     public static double TRACK_WIDTH = 10.0;
 
@@ -86,11 +87,13 @@ public class DriveConstants {
         return rpm * GEAR_RATIO * 2 * Math.PI * WHEEL_RADIUS / 60.0;
     }
 
+    //possibly modify getMaxPRM LAST RESORT
     public static double getMaxRpm() {
         return MOTOR_CONFIG.getMaxRPM() *
                 (RUN_USING_ENCODER ? MOTOR_CONFIG.getAchieveableMaxRPMFraction() : 1.0);
     }
 
+    //Possibly change these values (RPM is 312, TicksPerRev is 537.6
     public static double getTicksPerSec() {
         // note: MotorConfigurationType#getAchieveableMaxTicksPerSecond() isn't quite what we want
         return (MOTOR_CONFIG.getMaxRPM() * MOTOR_CONFIG.getTicksPerRev() / 60.0);
