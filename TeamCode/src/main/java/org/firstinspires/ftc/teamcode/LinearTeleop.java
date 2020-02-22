@@ -175,10 +175,13 @@ public class LinearTeleop extends LinearOpMode {
     }
 
     public void sensorPickupProcess(){
-       if( robot.sensorDistance.getDistance(DistanceUnit.CM) < 7) {
+        boolean pickedUp = robot.sensorDistance.getDistance(DistanceUnit.CM) < 7;
+        if( robot.sensorDistance.getDistance(DistanceUnit.CM) < 7 && !pickedUp) {
+            robot.arm.setTargetPosition(0);
+            sleep(200);
            robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
            sleep(500);
-           robot.arm.setTargetPosition(200);
+           robot.arm.setTargetPosition(-200);
            sleep(500);
        }
     }
