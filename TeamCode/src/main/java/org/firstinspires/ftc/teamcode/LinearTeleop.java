@@ -19,6 +19,7 @@ public class LinearTeleop extends LinearOpMode {
     boolean intakeOn = true;
     int armPos = OmegaBot.ARM_INIT;
     int count = 0;
+    boolean pickedUp = false;
 
     public void runOpMode() {
         robot = new OmegaBot(telemetry,hardwareMap);//initializing hardware
@@ -167,7 +168,6 @@ public class LinearTeleop extends LinearOpMode {
     }
 
     public void sensorPickupProcess() {
-        boolean pickedUp = robot.sensorDistance.getDistance(DistanceUnit.CM) < 7;
         if (robot.sensorDistance.getDistance(DistanceUnit.CM) < 7 && !pickedUp) {
             robot.arm.setTargetPosition(0);
             sleep(200);
@@ -175,7 +175,11 @@ public class LinearTeleop extends LinearOpMode {
             sleep(500);
             robot.arm.setTargetPosition(-200);
             sleep(500);
+            pickedUp = true;
        }
+        if(robot.arm.getTargetPosition() < -400){
+            pickedUp = false;
+        }
     }
 
     public void drivetrainProcess() {
