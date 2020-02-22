@@ -100,24 +100,16 @@ public class LinearTeleop extends LinearOpMode {
         boolean grabbingBlock = false;
 
         if (gamepad2.a && armPos > -1700) {
-            // pressing a makes arm go back incrementally
+            // makes arm go back incrementally
             armPos -= 5;
-            //robot.arm.setPower(.75);
-            //moveArm(-30);
         } else if (gamepad2.b && armPos < 0) {
-            // pressing b makes arm go forward incrementally
+            // makes arm go forward incrementally
             armPos += 5;
-            //moveArm(30);
-            //robot.arm.setPower(-.75);
         } else if (gamepad2.dpad_down) {
             // puts arm and blockGripper in down position and grips block
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
             armPos = OmegaBot.ARM_DOWN;
             grabbingBlock = true;
-//        } else if (gamepad2.dpad_left) {
-//            // puts arm and blockGripper in traveling position
-//            robot.blockGripper.setPosition(0.2);
-//            armPos = -210;
         } else if (gamepad2.dpad_up) {
             // puts arm and blockGripper in up position
             armPos = OmegaBot.ARM_UP;
@@ -132,13 +124,13 @@ public class LinearTeleop extends LinearOpMode {
             // sleep so that blockGripper can actually open then close
             sleep(1500);
 
-            // closes blockGripper (intakes stone with gripper)
+            // intake stone with gripper
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
 
-            // moves arm to traveling position
+            // move arm to traveling position
             robot.arm.setTargetPosition(OmegaBot.ARM_TRAVELING);
-            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION); // not sure if this is needed
-            robot.arm.setPower(power); // not sure if this is needed
+            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.arm.setPower(power);
         }
     }
 
@@ -158,7 +150,7 @@ public class LinearTeleop extends LinearOpMode {
         }
     }
 
-    public void intakeProcessOut(){
+    public void intakeProcessOut() {
         if (gamepad2.left_trigger > .5) {
             if (gamepad2.left_trigger > .5 && gamepad2.right_trigger > .5) {
                 robot.leftIntake.setPower(0);
@@ -174,19 +166,19 @@ public class LinearTeleop extends LinearOpMode {
         }
     }
 
-    public void sensorPickupProcess(){
+    public void sensorPickupProcess() {
         boolean pickedUp = robot.sensorDistance.getDistance(DistanceUnit.CM) < 7;
-        if( robot.sensorDistance.getDistance(DistanceUnit.CM) < 7 && !pickedUp) {
+        if (robot.sensorDistance.getDistance(DistanceUnit.CM) < 7 && !pickedUp) {
             robot.arm.setTargetPosition(0);
             sleep(200);
-           robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
-           sleep(500);
-           robot.arm.setTargetPosition(-200);
-           sleep(500);
+            robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
+            sleep(500);
+            robot.arm.setTargetPosition(-200);
+            sleep(500);
        }
     }
 
-    public void drivetrainProcess(){
+    public void drivetrainProcess() {
         double forward = -gamepad1.left_stick_y;
         double right = gamepad1.left_stick_x;
         double clockwise = gamepad1.right_stick_x *.75;
@@ -216,17 +208,17 @@ public class LinearTeleop extends LinearOpMode {
             rear_right /= (max/maxSpeed);
         }
 
-        if(gamepad1.a){//if a strafe left
+        if (gamepad1.a) { //if a strafe left
             robot.frontLeft.setPower(-1);
             robot.frontRight.setPower(1);
             robot.backLeft.setPower(1);
             robot.backRight.setPower(-1);
-        } else if(gamepad1.b){//if b strafe right
+        } else if(gamepad1.b) { //if b strafe right
             robot.frontLeft.setPower(1);
             robot.frontRight.setPower(-1);
             robot.backLeft.setPower(-1);
             robot.backRight.setPower(1);
-        } else {//otherwise joysticks
+        } else { //otherwise joysticks
             robot.frontLeft.setPower(front_left);
             robot.frontRight.setPower(front_right);
             robot.backLeft.setPower(rear_left);
