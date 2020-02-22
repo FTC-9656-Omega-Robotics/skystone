@@ -42,6 +42,12 @@ public class OmegaBot {
     public DcMotor leftIntake;
     public DcMotor rightIntake;
 
+    // arm position constants
+    static final int ARM_INIT = -200;
+    static final int ARM_DOWN = -100;
+    static final int ARM_UP = -900;
+    static final int ARM_TRAVELING = -210;
+
     // servos
     public Servo blockRotator; // rotates block gripper on arm
     public Servo blockGripper; // opens/closes gripper on arm
@@ -182,7 +188,7 @@ public class OmegaBot {
         backRight.setPower(0);
 
         // Initialize arm
-        arm.setTargetPosition(-200);
+        arm.setTargetPosition(ARM_INIT);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(.5);
 
