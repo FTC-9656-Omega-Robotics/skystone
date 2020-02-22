@@ -90,34 +90,55 @@ public class LinearTeleop extends LinearOpMode {
         }
     }
 
-    public void armProcess(){
+    public void armProcess() {
         double power = 0.5;
-        if(gamepad2.a && armPos > -1700){
+        boolean grabbingBlock = false;
+
+        final int ARM_DOWN = -100;
+        final int ARM_UP = -900;
+        final int ARM_TRAVELING = -210;
+
+        if (gamepad2.a && armPos > -1700) {
+            // pressing a makes arm go back incrementally
             armPos -= 5;
             //robot.arm.setPower(.75);
             //moveArm(-30);
-        }
-        else if(gamepad2.b && armPos < 0){
+        } else if (gamepad2.b && armPos < 0) {
+            // pressing b makes arm go forward incrementally
             armPos += 5;
             //moveArm(30);
             //robot.arm.setPower(-.75);
         } else if (gamepad2.dpad_down) {
-            robot.blockGripper.setPosition(0.75); // what does this position refer to?
-            armPos = -100;
-        } else if (gamepad2.dpad_left) {
-            robot.blockGripper.setPosition(0.2); // what does this position refer to?
-            armPos = -210;
+            // puts arm and blockGripper in down position and grips block
+            robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
+            armPos = ARM_DOWN;
+            grabbingBlock = true;
+//        } else if (gamepad2.dpad_left) {
+//            // puts arm and blockGripper in traveling position
+//            robot.blockGripper.setPosition(0.2);
+//            armPos = -210;
         } else if (gamepad2.dpad_up) {
-            armPos = -900;
+            // puts arm and blockGripper in up position
+            armPos = ARM_UP;
             power = .25;
         }
 
         robot.arm.setTargetPosition(armPos);
         robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.arm.setPower(power);
+
+        if (grabbingBlock) {
+            // closes blockGripper (intakes stone with gripper)
+            robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
+
+            // moves arm to traveling position
+            robot.arm.setTargetPosition(ARM_TRAVELING);
+            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION); // not sure if this is needed
+            robot.arm.setPower(power); // not sure if this is needed
+        }
     }
 
-    public void intakeProcessIn(){
+    public void intakeProcessIn() {
         if (gamepad2.right_trigger > .5) {
             if (gamepad2.left_trigger > .5 && gamepad2.right_trigger > .5) {
                 robot.leftIntake.setPower(0);
