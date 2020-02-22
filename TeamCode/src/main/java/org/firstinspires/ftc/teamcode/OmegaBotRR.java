@@ -35,6 +35,12 @@ public class OmegaBotRR {
     public DcMotor leftIntake;
     public DcMotor rightIntake;
 
+    // arm position constants
+    static final int ARM_INIT = -200;
+    static final int ARM_DOWN = -100;
+    static final int ARM_UP = -900;
+    static final int ARM_TRAVELING = -210;
+
     // servos
     public Servo blockRotator; // rotates block gripper on arm
     public Servo blockGripper; // opens/closes gripper on arm
