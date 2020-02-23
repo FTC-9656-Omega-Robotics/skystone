@@ -77,6 +77,12 @@ public class LinearTeleop extends LinearOpMode {
 
         if (gamepad2.right_bumper) {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
+            sleep(200);
+            armPos = -200;
+            robot.arm.setTargetPosition(armPos);
+            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            sleep(500);
+            pickedUp = false;
         } else if (gamepad2.left_bumper) {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
         }
@@ -86,6 +92,8 @@ public class LinearTeleop extends LinearOpMode {
         } else if (gamepad1.y) {
             robot.sideBackGripper.setPosition(OmegaBot.SIDE_BACK_GRIPPER_OPEN);
         }
+        telemetry.addData("Target Position: ", robot.arm.getTargetPosition());
+        telemetry.addData("Actual Position: ", robot.arm.getCurrentPosition());
     }
 
     public void foundationGrippers() {
@@ -97,7 +105,7 @@ public class LinearTeleop extends LinearOpMode {
     }
 
     public void armProcess() {
-        double power = 0.5;
+        double power = .5;
         boolean grabbingBlock = false;
 
         if (gamepad2.a && armPos > -1700) {
@@ -114,7 +122,7 @@ public class LinearTeleop extends LinearOpMode {
         } else if (gamepad2.dpad_up) {
             // puts arm and blockGripper in up position
             armPos = OmegaBot.ARM_UP;
-            power = .25;
+            power = .6;
         }
 
         robot.arm.setTargetPosition(armPos);
@@ -135,7 +143,7 @@ public class LinearTeleop extends LinearOpMode {
         }
     }
 
-    public void intakeProcessIn() {
+    public void intakeProcessOut() {
         if (gamepad2.right_trigger > .5) {
             if (gamepad2.left_trigger > .5 && gamepad2.right_trigger > .5) {
                 robot.leftIntake.setPower(0);
@@ -143,6 +151,7 @@ public class LinearTeleop extends LinearOpMode {
             } else {
                 robot.leftIntake.setPower(.3);
                 robot.rightIntake.setPower(-.3);
+
             }
 
         } else {
@@ -151,7 +160,7 @@ public class LinearTeleop extends LinearOpMode {
         }
     }
 
-    public void intakeProcessOut() {
+    public void intakeProcessIn() {
         if (gamepad2.left_trigger > .5) {
             if (gamepad2.left_trigger > .5 && gamepad2.right_trigger > .5) {
                 robot.leftIntake.setPower(0);
@@ -159,6 +168,7 @@ public class LinearTeleop extends LinearOpMode {
             } else {
                 robot.leftIntake.setPower(-1);
                 robot.rightIntake.setPower(1);
+
             }
 
         } else {
@@ -169,17 +179,14 @@ public class LinearTeleop extends LinearOpMode {
 
     public void sensorPickupProcess() {
         if (robot.sensorDistance.getDistance(DistanceUnit.CM) < 7 && !pickedUp) {
+            pickedUp = true;
             robot.arm.setTargetPosition(0);
-            sleep(200);
+            sleep(800);
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
             sleep(500);
             robot.arm.setTargetPosition(-200);
             sleep(500);
-            pickedUp = true;
        }
-        if(robot.arm.getTargetPosition() < -400){
-            pickedUp = false;
-        }
     }
 
     public void drivetrainProcess() {
