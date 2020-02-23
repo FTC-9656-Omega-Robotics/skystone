@@ -6,21 +6,70 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.AutoBackend.CustomSkystoneDetector;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
+
 import org.firstinspires.ftc.teamcode.OmegaBotRR;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
+
 
 import kotlin.Unit;
 
 @Autonomous(group = "drive")
 public class Blue3Stone extends LinearOpMode {
     OmegaBotRR robot;
+    private OpenCvCamera phoneCam;
+    private CustomSkystoneDetector skyStoneDetector;
+
+    String skystonePosition = "none";
+    double xPosition;
+    double yPosition;
+
     @Override
     public void runOpMode() throws InterruptedException {
         // initialize robot and drivetrain
         robot = new OmegaBotRR(telemetry, hardwareMap);
         SampleMecanumDriveBase drive = new SampleMecanumDriveREV(hardwareMap);
+        //initializes camera detection stuff
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        //gets the camera ready and views the skystones
+        phoneCam.openCameraDevice();
+        skyStoneDetector = new CustomSkystoneDetector();
+        skyStoneDetector.useDefaults();
+        phoneCam.setPipeline(skyStoneDetector);
+        phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+
+
+        double positionCorrector = 0;
+        //All comments comment above what is being commented
+
+        while (!isStopRequested() && !opModeIsActive()) {
+            xPosition = skyStoneDetector.foundRectangle().x;
+            yPosition = skyStoneDetector.foundRectangle().y;
+
+            if (xPosition >= 180 || xPosition < 40) {
+                skystonePosition = "right";
+                //positionCorrector = 14;
+            } else if (xPosition > 130) {//x = 12
+                skystonePosition = "center";
+                //positionCorrector = 8;
+            } else {
+                skystonePosition = "left";
+                positionCorrector = 0;
+            }
+
+            telemetry.addData("xPos", xPosition);
+            telemetry.addData("yPos", yPosition);
+            telemetry.addData("SkyStone Pos", skystonePosition);
+            telemetry.update();
+        }
+        //TODO Find what numbers we need to set the positionCorrector to for each skystone position, then incorporate that into our spline code
+
 
         waitForStart();
 
@@ -39,8 +88,41 @@ public class Blue3Stone extends LinearOpMode {
                             return Unit.INSTANCE;
                         })
                         .splineTo(new Pose2d(55,-35, 0)) // spline to coordinates (turns)
+
+                        .addMarker(() -> { // addMarker to use servos to drop first block
+                            //add servos
+
+                            return Unit.INSTANCE;
+                        })
+
                         .reverse() // makes robot go in reverse direction (rather than turning around to go to new Pose2d)
-                        .splineTo(new Pose2d(-52,-39,0))
+                        .splineTo(new Pose2d(-52,-39,0))//goes to pick up second block
+
+                        .addMarker(() -> { // addMarker to use servos to pick up second block
+                            //add servos
+                            return Unit.INSTANCE;
+                        })
+
+                        .reverse()//reverses the reverse so it's normal again
+                        .splineTo(new Pose2d(49,-35,0))//goes to drop of second block
+
+                        .addMarker(() -> { // addMarker to use servos to drop off second block
+                            //add servos
+                            return Unit.INSTANCE;
+                        })
+
+                        .reverse()//reverses the robot to go pick up the third block
+                        .splineTo(new Pose2d(-20,-35,0))//goes to pick up third block
+
+                        .addMarker(() -> { // addMarker to use servos to pick up 3rd block
+                            //add servos
+                            return Unit.INSTANCE;
+                        })
+
+                        .reverse()//reverses the previous reverse to get it back to normal
+
+
+
                         .build() // builds the path that I coded above
         );
 
