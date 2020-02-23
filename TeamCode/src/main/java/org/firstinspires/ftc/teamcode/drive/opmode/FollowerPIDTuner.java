@@ -36,7 +36,7 @@ public class FollowerPIDTuner extends LinearOpMode {
                             .forward(DISTANCE)
                             .build()
             );
-            drive.turnSync(Math.toRadians(90));
+            drive.turnSync(Math.toRadians(88));
         }
     }
 }

@@ -78,7 +78,7 @@ public class LinearTeleop extends LinearOpMode {
         if (gamepad2.right_bumper) {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
             sleep(200);
-            armPos = -200;
+            armPos = OmegaBot.ARM_INIT;
             robot.arm.setTargetPosition(armPos);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             sleep(500);
