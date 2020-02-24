@@ -84,26 +84,6 @@ public class Blue3Stone extends LinearOpMode {
         if (isStopRequested()) return;
 
         /*
-        GUIDE TO ROADRUNNER:
-
-        setPoseEstimate(new Pose2d(x, y, heading)); // set initial position of robot
-
-        addMarker(time or pos () -> {
-            // add stuff that the robot does here
-
-            return Unit.INSTANCE;
-        })
-
-        splineTo(new Pose2d(x, y, heading)) // spline to coordinates (turns)
-
-        strafeTo(new Vector2d(x, y)) // strafe to coordinates (without turning)
-
-        reverse(); // reverse direction (to go forward reverse() again)
-
-        build() // builds the path you just coded
-         */
-
-        /*
         3 stone auto code blue side:
 
         1. Move to skystonePositionWall
@@ -144,18 +124,10 @@ public class Blue3Stone extends LinearOpMode {
         13. Park under skybridge (set a constant to that Pose2d position)
          */
 
-        // just realized we should have methods for moving robot parts in OmegaBot and OmegaBotRR
-        // for example, instead of saying robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        // we can just have a method called closeGripper() and call it by saying robot.closeGripper();
-        // we could also have methods like pickUpStone(sideGripper) that automatically does the picking up
-
         // set initial position
         drive.setPoseEstimate(ROBOT_INIT_POSITION);
 
         // commands inside the trajectory run one after another
-
-
-
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .strafeTo(new Vector2d(-39,-39)) // strafe to coordinates (without turning)
@@ -176,8 +148,5 @@ public class Blue3Stone extends LinearOpMode {
                         .splineTo(new Pose2d(40,-35,0))//goes to drop off 3d block
                         .build()
         );
-
-
-
     }
 }
