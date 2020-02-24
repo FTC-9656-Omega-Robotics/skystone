@@ -87,33 +87,23 @@ public class Blue3Stone extends LinearOpMode {
         drive.followTrajectorySync(
                     drive.trajectoryBuilder()
                         .splineTo(new Pose2d(55,-35, 0)) // spline to coordinates (turns)
-                        .build()
-        );
-
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
                         .reverse() // makes robot go in reverse direction (rather than turning around to go to new Pose2d)
                         .splineTo(new Pose2d(-52,-39,0))//goes to pick up second block
                         .reverse()//reverses the reverse so it's normal again
+                         .splineTo(new Pose2d(49,-35,0))//goes to drop of second block
                         .build()
+
         );
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(49,-35,0))//goes to drop of second block
-                        .build()
-        );
+
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .reverse()//reverses the robot to go pick up the third block
                         .splineTo(new Pose2d(-20,-35,0))//goes to pick up third block
                         .reverse()//reverses the previous reverse to get it back to normal
-                        .build()
-        );
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
                         .splineTo(new Pose2d(40,-35,0))//goes to drop off 3d block
                         .build()
         );
+
 
 
     }
