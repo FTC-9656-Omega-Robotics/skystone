@@ -29,6 +29,8 @@ public class Blue3Stone extends LinearOpMode {
     double xPosition;
     double yPosition;
 
+    Pose2d ROBOT_INIT_POSITION = new Pose2d(-39,-63,0);
+
     @Override
     public void runOpMode() throws InterruptedException {
         // initialize robot and drivetrain
@@ -43,6 +45,12 @@ public class Blue3Stone extends LinearOpMode {
         skyStoneDetector.useDefaults();
         phoneCam.setPipeline(skyStoneDetector);
         phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+
+
+        // initialize these variables when the camera figures out
+        // what the skystonePosition is (see while loop below)
+        Pose2d skystonePositionWall; // position of skystone closest to the wall
+        Pose2d skystonePositionBridge; // position of skystone closest to the bridge
 
 
         double positionCorrector = 0;
@@ -60,7 +68,7 @@ public class Blue3Stone extends LinearOpMode {
                 //positionCorrector = 8;
             } else {
                 skystonePosition = "left";
-                positionCorrector = 0;
+                //positionCorrector = 0;
             }
 
             telemetry.addData("xPos", xPosition);
@@ -75,19 +83,85 @@ public class Blue3Stone extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        // set initial position of the robot (x- and y-coordinates and heading)
-        drive.setPoseEstimate(new Pose2d(-39,-63,0));
+        /*
+        GUIDE TO ROADRUNNER:
+
+        setPoseEstimate(new Pose2d(x, y, heading)); // set initial position of robot
+
+        addMarker(time or pos () -> {
+            // add stuff that the robot does here
+
+            return Unit.INSTANCE;
+        })
+
+        splineTo(new Pose2d(x, y, heading)) // spline to coordinates (turns)
+
+        strafeTo(new Vector2d(x, y)) // strafe to coordinates (without turning)
+
+        reverse(); // reverse direction (to go forward reverse() again)
+
+        build() // builds the path you just coded
+         */
+
+        /*
+        3 stone auto code blue side:
+
+        1. Move to skystonePositionWall
+        2. Pick up skystone there
+            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        3. Move next to foundation (set a constant to that Pose2d position)
+        4. Dump skystone on foundation
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        5. Move to skystonePositionBridge
+        6. Pick up skystone there
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        7. Move back to foundation (set a constant to that Pose2d position)
+        8. Dump skystone on foundation
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        9. Move to closest regular stone (set a constant to that Pose2d position)
+        10. Pick up stone there
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        11. Dump skystone on foundation
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        12. Pull foundation into building zone
+            // move closer to foundation?
+            robot.foundationGrippers.setPosition(OmegaBotRR.FOUNDATION_GRIPPERS_DOWN);
+            // pull foundation into building zone by turning smartly
+            robot.foundationGrippers.setPosition(OmegaBotRR.FOUNDATION_GRIPPERS_UP);
+        13. Park under skybridge (set a constant to that Pose2d position)
+         */
+
+        // just realized we should have methods for moving robot parts in OmegaBot and OmegaBotRR
+        // for example, instead of saying robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+        // we can just have a method called closeGripper() and call it by saying robot.closeGripper();
+        // we could also have methods like pickUpStone(sideGripper) that automatically does the picking up
+
+        // set initial position
+        drive.setPoseEstimate(ROBOT_INIT_POSITION);
 
         // commands inside the trajectory run one after another
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()//new TrajectoryBuilder(new Pose2d(0,0,0), drive.getConstraints())
-                        .strafeTo(new Vector2d(-39,-39)) // strafe to coordinates (without turning)
-                        .addMarker(() -> { // addMarker to do things while following the trajectory
+                        .strafeTo(new Vector2d(-39,-39))
+                        .addMarker(() -> {
                             drive.setPoseEstimate(new Pose2d(-39,-27,0));
                             //add servos
                             return Unit.INSTANCE;
                         })
-                        .splineTo(new Pose2d(55,-35, 0)) // spline to coordinates (turns)
+                        .splineTo(new Pose2d(55,-35, 0))
 
                         .addMarker(() -> { // addMarker to use servos to drop first block
                             //add servos
@@ -95,7 +169,7 @@ public class Blue3Stone extends LinearOpMode {
                             return Unit.INSTANCE;
                         })
 
-                        .reverse() // makes robot go in reverse direction (rather than turning around to go to new Pose2d)
+                        .reverse()
                         .splineTo(new Pose2d(-52,-39,0))//goes to pick up second block
 
                         .addMarker(() -> { // addMarker to use servos to pick up second block
