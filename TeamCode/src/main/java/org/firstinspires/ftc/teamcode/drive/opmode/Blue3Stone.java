@@ -153,61 +153,30 @@ public class Blue3Stone extends LinearOpMode {
         drive.setPoseEstimate(ROBOT_INIT_POSITION);
 
         // commands inside the trajectory run one after another
+
+
+
         drive.followTrajectorySync(
-                drive.trajectoryBuilder()//new TrajectoryBuilder(new Pose2d(0,0,0), drive.getConstraints())
-                        .strafeTo(new Vector2d(-39,-39))
-                        .addMarker(() -> {
-                            drive.setPoseEstimate(new Pose2d(-39,-27,0));
-                            //add servos
-                            return Unit.INSTANCE;
-                        })
-                        .splineTo(new Pose2d(55,-35, 0))
-
-                        .addMarker(() -> { // addMarker to use servos to drop first block
-                            //add servos
-                            telemetry.addLine("hello");
-                            return Unit.INSTANCE;
-                        })
-
-                        .reverse()
+                drive.trajectoryBuilder()
+                        .strafeTo(new Vector2d(-39,-39)) // strafe to coordinates (without turning)
+                        .splineTo(new Pose2d(55,-35, 0)) // spline to coordinates (turns
+                        .reverse() // makes robot go in reverse direction (rather than turning around to go to new Pose2d)
                         .splineTo(new Pose2d(-52,-39,0))//goes to pick up second block
-
-                        .addMarker(() -> { // addMarker to use servos to pick up second block
-                            //add servos
-                            telemetry.addLine("hello");
-                            return Unit.INSTANCE;
-                        })
-
                         .reverse()//reverses the reverse so it's normal again
-                        .splineTo(new Pose2d(49,-35,0))//goes to drop of second block
+                         .splineTo(new Pose2d(49,-35,0))//goes to drop of second block
+                        .build()
 
-                        .addMarker(() -> { // addMarker to use servos to drop off second block
-                            //add servos
-                            telemetry.addLine("hello");
-                            return Unit.INSTANCE;
-                        })
+        );
 
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
                         .reverse()//reverses the robot to go pick up the third block
                         .splineTo(new Pose2d(-20,-35,0))//goes to pick up third block
-
-                        .addMarker(() -> { // addMarker to use servos to pick up 3rd block
-                            //add servos
-                            telemetry.addLine("hello");
-                            return Unit.INSTANCE;
-                        })
-
                         .reverse()//reverses the previous reverse to get it back to normal
-
                         .splineTo(new Pose2d(40,-35,0))//goes to drop off 3d block
-
-                        .addMarker(() -> { // addMarker to use servos to drop off 3rd block
-                            //add servos
-                            telemetry.addLine("hello");
-                            return Unit.INSTANCE;
-                        })
-
-                        .build() // builds the path that I coded above
+                        .build()
         );
+
 
 
     }
