@@ -165,7 +165,7 @@ public class Blue3Stone extends LinearOpMode {
 
                         .addMarker(() -> { // addMarker to use servos to drop first block
                             //add servos
-
+                            telemetry.addLine("hello");
                             return Unit.INSTANCE;
                         })
 
@@ -174,6 +174,7 @@ public class Blue3Stone extends LinearOpMode {
 
                         .addMarker(() -> { // addMarker to use servos to pick up second block
                             //add servos
+                            telemetry.addLine("hello");
                             return Unit.INSTANCE;
                         })
 
@@ -182,6 +183,7 @@ public class Blue3Stone extends LinearOpMode {
 
                         .addMarker(() -> { // addMarker to use servos to drop off second block
                             //add servos
+                            telemetry.addLine("hello");
                             return Unit.INSTANCE;
                         })
 
@@ -190,12 +192,19 @@ public class Blue3Stone extends LinearOpMode {
 
                         .addMarker(() -> { // addMarker to use servos to pick up 3rd block
                             //add servos
+                            telemetry.addLine("hello");
                             return Unit.INSTANCE;
                         })
 
                         .reverse()//reverses the previous reverse to get it back to normal
 
+                        .splineTo(new Pose2d(40,-35,0))//goes to drop off 3d block
 
+                        .addMarker(() -> { // addMarker to use servos to drop off 3rd block
+                            //add servos
+                            telemetry.addLine("hello");
+                            return Unit.INSTANCE;
+                        })
 
                         .build() // builds the path that I coded above
         );
