@@ -76,12 +76,16 @@ public class LinearTeleop extends LinearOpMode {
         }
 
         if (gamepad2.right_bumper) {
+            // opens block gripper
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
             sleep(200);
+
+            // moves arm back to init position
             armPos = OmegaBot.ARM_INIT;
             robot.arm.setTargetPosition(armPos);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             sleep(500);
+
             pickedUp = false;
         } else if (gamepad2.left_bumper) {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
@@ -178,13 +182,26 @@ public class LinearTeleop extends LinearOpMode {
     }
 
     public void sensorPickupProcess() {
-        if (robot.sensorDistance.getDistance(DistanceUnit.CM) < 7 && !pickedUp) {
+        boolean isBlockIntaked = robot.sensorDistance.getDistance(DistanceUnit.CM) < 7;
+        double armPower = 0.5;
+
+        if (isBlockIntaked && !pickedUp) {
             pickedUp = true;
+
+            // move arm down to intake block
             robot.arm.setTargetPosition(0);
+            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.arm.setPower(armPower);
             sleep(800);
+
+            // grip the block
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
             sleep(500);
-            robot.arm.setTargetPosition(-200);
+
+            // move arm to traveling position
+            robot.arm.setTargetPosition(OmegaBot.ARM_TRAVELING);
+            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.arm.setPower(armPower);
             sleep(500);
        }
     }
