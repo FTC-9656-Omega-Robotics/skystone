@@ -52,6 +52,17 @@ public class Blue3Stone extends LinearOpMode {
         Pose2d skystonePositionWall; // position of skystone closest to the wall
         Pose2d skystonePositionBridge; // position of skystone closest to the bridge
 
+        /*
+        skystonePos for BLUE DEPOT SIDE, RED SKYBRIDGE
+        - each stone is 8 in long
+        1 (-29, -39)
+        2 (-37, -39)
+        3 (-45, -39)
+        4 (-53, -39)
+        5 (-61, -39)
+        6 (-69, -39)
+         */
+
 
         double positionCorrector = 0;
         //All comments comment above what is being commented
@@ -98,9 +109,10 @@ public class Blue3Stone extends LinearOpMode {
             robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
             robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         5. Move to skystonePositionBridge
+            - put elbow in ready position
         6. Pick up skystone there
-            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+            robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
+            robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
             robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         7. Move back to foundation (set a constant to that Pose2d position)
         8. Dump skystone on foundation
@@ -108,6 +120,7 @@ public class Blue3Stone extends LinearOpMode {
             robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
             robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         9. Move to closest regular stone (set a constant to that Pose2d position)
+            - put elbow in ready position
         10. Pick up stone there
             robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
             robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
