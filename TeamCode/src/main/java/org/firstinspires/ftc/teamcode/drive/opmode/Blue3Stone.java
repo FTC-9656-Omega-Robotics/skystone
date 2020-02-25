@@ -64,7 +64,7 @@ public class Blue3Stone extends LinearOpMode {
         final Pose2d skystonePos6 = new Pose2d(-69, -39, 0);
 
         // a bit of space between robot and neutral bridge
-        final Pose2d underRedBridgePos = new Pose2d(0, -35, 0);
+        final Pose2d underRedBridgePos = new Pose2d(0, -40, 0);
 
         // far = close to wall, close = close to bridge
         final Pose2d dumpingPosFar = new Pose2d(60, -35, 0);
@@ -225,10 +225,18 @@ public class Blue3Stone extends LinearOpMode {
 //                            return Unit.INSTANCE;
 //                        })
                         .reverse() // reverse direction to go back for stone
-                        // do third (regular) stone
+                        .splineTo(skystonePos1)
+                        .reverse()
+                        .splineTo(underRedBridgePos)
+                        .splineTo(dumpingPosClose)
+                        // do third (regular) stones
                         .build()
 
+
         );
+
+        drive.turnSync(Math.toRadians(90));
+
 
         //TODO split up trajectory above into smaller ones to avoid emergency stop error
         /*
