@@ -78,6 +78,7 @@ public class OmegaBot {
 
     public static final double SIDE_BACK_ELBOW_UP = 0.31;
     public static final double SIDE_BACK_ELBOW_DOWN = 0;
+    public static final double SIDE_BACK_ELBOW_READY = 0.15; // for auto efficiency
 
     public static final double SIDE_FRONT_GRIPPER_OPEN = 0.91;
     public static final double SIDE_FRONT_GRIPPER_CLOSED = 0.56;
@@ -87,6 +88,7 @@ public class OmegaBot {
     public static final double SIDE_FRONT_ELBOW_DOWN = 0;
     //gripper sticks out, we will need a SIDE_FRONT_ELBOW_STOWED after phone is moved
     // public final double SIDE_FRONT_ELBOW_STOWED = [some value]; // stowed for robot inspection
+    public static final double SIDE_FRONT_ELBOW_READY = 0.15; // for auto efficiency
 
     public final double CAPSTONE_HELD = 0.9;
     public final double CAPSTONE_DROPPED = 0.28;
