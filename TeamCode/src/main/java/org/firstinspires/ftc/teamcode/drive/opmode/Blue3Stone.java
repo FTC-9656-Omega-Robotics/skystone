@@ -165,65 +165,65 @@ public class Blue3Stone extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .strafeTo(new Vector2d(skystoneWallX, skystoneWallY)) // strafe to first skystone (closest to wall)
-                        .addMarker( () -> {
-                            // pick up first skystone
-                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-                            sleep(500);
-                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-                            sleep(500);
-                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-                            sleep(500);
-
-                            return Unit.INSTANCE;
-                        })
+//                        .addMarker( () -> {
+//                            // pick up first skystone
+//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+//                            sleep(500);
+//                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+//                            sleep(500);
+//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+//                            sleep(500);
+//
+//                            return Unit.INSTANCE;
+//                        })
                         .splineTo(underRedBridgePos) // spline to under red bridge
                         .splineTo(dumpingPosFar)// spline to foundation far dumping position
-                        .addMarker( () -> {
-                            // dump skystone
-                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-                            sleep(500);
-                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
-                            sleep(500);
-                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-                            sleep(500);
-
-                            return Unit.INSTANCE;
-                        })
+//                        .addMarker( () -> {
+//                            // dump skystone
+//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+//                            sleep(500);
+//                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+//                            sleep(500);
+//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+//                            sleep(500);
+//
+//                            return Unit.INSTANCE;
+//                        })
                         .reverse()// reverse direction to go back for stone
                         .splineTo(underRedBridgePos) // spline back under bridge
-                        .addMarker( () -> {
-                            // put side front elbow in ready position
-                            robot.sideBackElbow.setPosition(0.15); // 0.15 is testing for ready pos, TODO make constant
-                            sleep(500);
-
-                            return Unit.INSTANCE;
-                        })
+//                        .addMarker( () -> {
+//                            // put side front elbow in ready position
+//                            robot.sideBackElbow.setPosition(0.15); // 0.15 is testing for ready pos, TODO make constant
+//                            sleep(500);
+//
+//                            return Unit.INSTANCE;
+//                        })
                         .splineTo(skystonePosBridge) // spline to second skystone (closest to bridge)
-                        .addMarker( () -> {
-                            // pick up second skystone
-                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-                            sleep(500);
-                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-                            sleep(500);
-                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-                            sleep(500);
-
-                            return Unit.INSTANCE;
-                        })
+//                        .addMarker( () -> {
+////                            // pick up second skystone
+////                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+////                            sleep(500);
+////                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+////                            sleep(500);
+////                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+////                            sleep(500);
+////
+////                            return Unit.INSTANCE;
+////                        })
                         .reverse() //reverses the reverse so it goes forward again
                         .splineTo(underRedBridgePos)// spline to under bridge
                         .splineTo(dumpingPosMid) // splines to foundation to dump skystone
-                        .addMarker( () -> {
-                            // dump second skystone
-                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-                            sleep(500);
-                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
-                            sleep(500);
-                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-                            sleep(500);
-
-                            return Unit.INSTANCE;
-                        })
+//                        .addMarker( () -> {
+//                            // dump second skystone
+//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+//                            sleep(500);
+//                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+//                            sleep(500);
+//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+//                            sleep(500);
+//
+//                            return Unit.INSTANCE;
+//                        })
                         .reverse() // reverse direction to go back for stone
                         // do third (regular) stone
                         .build()
