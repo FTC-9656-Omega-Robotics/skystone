@@ -22,7 +22,7 @@ import java.util.Vector;
 import kotlin.Unit;
 
 @Autonomous(group = "drive")
-public class Blue3Stone extends LinearOpMode {
+public class Red3Stone extends LinearOpMode {
     OmegaBotRR robot;
     private OpenCvCamera phoneCam;
     private CustomSkystoneDetector skyStoneDetector;
