@@ -64,6 +64,7 @@ public class OmegaBotRR {
 
     public static final double FOUNDATION_GRIPPER_UP = 0.55;
     public static final double FOUNDATION_GRIPPER_DOWN = 1;
+    public static final double FOUNDATION_GRIPPER_READY = 0.85;
 
     public static final double SIDE_BACK_GRIPPER_OPEN = 0.41;
     public static final double SIDE_BACK_GRIPPER_CLOSED = 0.05;
