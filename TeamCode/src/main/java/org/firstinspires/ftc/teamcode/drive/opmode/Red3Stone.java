@@ -121,8 +121,9 @@ public class Red3Stone extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        // move side back elbow down before moving
+        // before moving, get side back elbow and gripper ready
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
 
         // set initial position
         drive.setPoseEstimate(ROBOT_INIT_POSITION);
@@ -258,13 +259,16 @@ public class Red3Stone extends LinearOpMode {
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
 
-        // turn to grip foundation
+        // get foundation gripper ready for pull
+        robot.foundationGripper.setPosition(OmegaBotRR.FOUNDATION_GRIPPER_READY);
+
+        // move to grip foundation
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        // turn 90 deg right to grip foundation
                         // TODO: check if 90 deg is turning right or left
                         // TODO: If any changes made to x and y of dumping pos constants, change x and y here accordingly since they're based on DUMP_POS_CLOSE
-                        .splineTo(new Pose2d(45, -35, Math.toRadians(90)))
+                        .splineTo(new Pose2d(45, -35, Math.toRadians(90))) // turn 90 deg right
+                        .splineTo(new Pose2d(45, -33, Math.toRadians(90))) // back up to be close enough to grip foundation
                 .build()
         );
 
