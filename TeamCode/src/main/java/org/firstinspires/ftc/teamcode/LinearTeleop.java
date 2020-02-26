@@ -198,8 +198,8 @@ public class LinearTeleop extends LinearOpMode {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
             sleep(500);
 
-            // move arm to traveling position
-            robot.arm.setTargetPosition(OmegaBot.ARM_TRAVELING);
+            // move arm to traveling (init) position
+            robot.arm.setTargetPosition(OmegaBot.ARM_INIT);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setPower(armPower);
             sleep(500);
@@ -209,7 +209,13 @@ public class LinearTeleop extends LinearOpMode {
     public void drivetrainProcess() {
         double forward = -gamepad1.left_stick_y;
         double right = gamepad1.left_stick_x;
-        double clockwise = gamepad1.right_stick_x *.75;
+        double clockwise = gamepad1.right_stick_x * .75;
+
+        // cubic drive - instead of proportional power to motors, cube input from joysticks
+        forward = Math.pow(forward, 3);
+        right = Math.pow(right, 3);
+        clockwise = Math.pow(clockwise, 3);
+
         //double temp = forward * Math.cos(Math.toRadians(robot.getAngle())) - right * Math.sin(Math.toRadians(robot.getAngle()));
         //right = forward * Math.sin(Math.toRadians(robot.getAngle())) + right * Math.cos(Math.toRadians(robot.getAngle()));
         //forward = temp;
