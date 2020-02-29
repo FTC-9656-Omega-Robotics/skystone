@@ -90,7 +90,7 @@ public class OmegaBotRR {
     public static final double CAPSTONE_ROTATOR_INIT = 0;
     public static final double CAPSTONE_ROTATOR_ROTATED = 0; // rotated to release position
 
-    public static final double CAPSTONE_RELEASER_HELD = 0;
+    public static final double CAPSTONE_RELEASER_HELD = 0; // verified
     public static final double CAPSTONE_RELEASER_RELEASED = 0;
 
     // sensors
