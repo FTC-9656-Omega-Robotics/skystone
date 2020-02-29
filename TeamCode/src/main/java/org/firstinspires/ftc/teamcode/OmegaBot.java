@@ -60,7 +60,8 @@ public class OmegaBot {
     public Servo sideFrontGripper; // open/closes side front gripper
     public Servo sideFrontElbow; // moves side front gripper up/down
 
-    public Servo capstone;
+    public Servo capstoneRotator; // rotates the capstone
+    public Servo capstoneReleaser; // releases the capstone
 
     // servo position constants
     public static final double BLOCK_ROTATOR_STRAIGHT = 0.62; // STRAIGHT is position for using blockGripper to intake
@@ -91,8 +92,13 @@ public class OmegaBot {
     // public final double SIDE_FRONT_ELBOW_STOWED = [some value]; // stowed for robot inspection
     public static final double SIDE_FRONT_ELBOW_READY = 0.15; // for auto efficiency
 
-    public final double CAPSTONE_HELD = 0.9;
-    public final double CAPSTONE_DROPPED = 0.28;
+    // TODO Add correct servo positions for the following:
+
+    public static final double CAPSTONE_ROTATOR_INIT = 0;
+    public static final double CAPSTONE_ROTATOR_ROTATED = 0; // rotated to release position
+
+    public static final double CAPSTONE_RELEASER_HELD = 0;
+    public static final double CAPSTONE_RELEASER_RELEASED = 0;
 
     // sensors
     public ColorSensor sensorColor;
@@ -147,7 +153,8 @@ public class OmegaBot {
         sideFrontGripper = hardwareMap.get(Servo.class, "side_front_gripper");
         sideFrontElbow = hardwareMap.get(Servo.class, "side_front_elbow");
 
-        capstone = hardwareMap.get(Servo.class, "capstone");
+        capstoneRotator = hardwareMap.get(Servo.class, "capstone_rotator");
+        capstoneReleaser = hardwareMap.get(Servo.class, "capstone_releaser");
 
         // Configure sensors with REV Expansion Hub
         sensorDistance = hardwareMap.get(DistanceSensor.class, "color_distance_sensor");
@@ -207,7 +214,8 @@ public class OmegaBot {
         sideFrontGripper.setPosition(SIDE_FRONT_GRIPPER_STOWED);
         sideFrontElbow.setPosition(SIDE_FRONT_ELBOW_UP);
 
-        capstone.setPosition(CAPSTONE_HELD);
+        capstoneRotator.setPosition(CAPSTONE_ROTATOR_INIT);
+        capstoneReleaser.setPosition(CAPSTONE_RELEASER_HELD);
 
         // Set up PID for drivetrain
         drivetrain = new OmegaDriveTrain(frontLeft, frontRight, backLeft, backRight);

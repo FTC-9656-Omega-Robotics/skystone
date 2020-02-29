@@ -120,12 +120,11 @@ public class AnythingTester extends LinearOpMode {
         motionMethods.moveMotionProfile(25,1);
 */
 
-        robot.capstone.setPosition(1);
-        //elbow down
+        // test capstone rotator positions
+        robot.capstoneRotator.setPosition(OmegaBot.CAPSTONE_ROTATOR_INIT);
         sleep(1000);
 
-        robot.capstone.setPosition(0);
-        //elbow up
+        robot.capstoneRotator.setPosition(OmegaBot.CAPSTONE_ROTATOR_ROTATED);
         sleep(1000);
 
     }
