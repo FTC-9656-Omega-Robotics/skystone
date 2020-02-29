@@ -95,21 +95,12 @@ public class AnythingTesterRR extends LinearOpMode {
             telemetry.addData("SkyStone Pos", skystonePosition);
             telemetry.update();
         }
-        robot.arm.setTargetPosition(-200);
-        robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.arm.setPower(.5);
-        robot.sideFrontElbow.setPosition(0);
-        /*robot.blockRotator.setPosition(0.62);
-        robot.blockGripper.setPosition(0.2);
-        //robot.sideFrontElbow.setPosition(0.5);
-        robot.sideBackGripper.setPosition((0.63));
-        robot.sideBackElbow.setPosition(0);
-        robot.sideFrontGripper.setPosition(0.35);
-        */
 
 
-            sleep(100000);
+        robot.capstoneRotator.setPosition(0.2);
+        sleep(500);
 
+        robot.capstoneRotator.setPosition(0.4);
 
 
     }
