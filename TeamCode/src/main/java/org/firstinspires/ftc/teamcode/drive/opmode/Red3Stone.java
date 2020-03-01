@@ -31,8 +31,6 @@ public class Red3Stone extends LinearOpMode {
     double xPosition;
     double yPosition;
 
-    Pose2d ROBOT_INIT_POSITION = new Pose2d(-39,-63,0);
-
     @Override
     public void runOpMode() throws InterruptedException {
         // initialize robot and drivetrain
@@ -49,6 +47,8 @@ public class Red3Stone extends LinearOpMode {
         phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
 
         // TODO: generally, just check if the position constants (stuff with final in front) are accurate
+
+        final Pose2d ROBOT_INIT_POSITION = new Pose2d(-39,-63,0);
 
         // 1 is closest to bridge, 6 is closest to wall
         final int SKYSTONE_Y = -35;
