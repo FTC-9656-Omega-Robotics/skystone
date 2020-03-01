@@ -214,7 +214,12 @@ public class OmegaBotRR{
             Thread.currentThread().interrupt();
         }
     }
-    public void pickUpWithBackGripper(){
+
+    /**
+     * Picks up a stone using the side back gripper and elbow.
+     * Pre-condition: sideBackGripper is in stowed or open position
+     */
+    public void pickUpWithBackGripper() {
         sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
         sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
@@ -223,16 +228,24 @@ public class OmegaBotRR{
         sleep(500);
     }
 
-    public void releaseWithBackGripper(){
+    /**
+     * Releases a stone using the side back gripper and elbow.
+     * Pre-condition: sideBackElbow is in up position
+     */
+    public void releaseWithBackGripper() {
         sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
-        sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
+        sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED); // stowed instead of open to be safe when traveling under bridge
         sleep(500);
         sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
     }
 
-    public void pickUpWithFrontGripper(){
+    /**
+     * Picks up a stone using the side front gripper and elbow.
+     * Pre-condition: sideFrontGripper is in stowed or open position
+     */
+    public void pickUpWithFrontGripper() {
         sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
         sleep(500);
         sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
@@ -240,5 +253,18 @@ public class OmegaBotRR{
         sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
         sleep(500);
 
+    }
+
+    /**
+     * Releases a stone using the side front gripper and elbow.
+     * Pre-condition: sideFrontElbow is in up position
+     */
+    public void releaseWithFrontGripper() {
+        sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
+        sleep(500);
+        sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED); // stowed instead of open to be safe when traveling under bridge
+        sleep(500);
+        sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
+        sleep(500);
     }
 }
