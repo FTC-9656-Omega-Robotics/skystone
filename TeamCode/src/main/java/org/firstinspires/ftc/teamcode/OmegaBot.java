@@ -86,18 +86,18 @@ public class OmegaBot {
     public static final double SIDE_FRONT_GRIPPER_CLOSED = 0.56;
     public static final double SIDE_FRONT_GRIPPER_STOWED = 0.35; // stowed for robot inspection
 
-    public static final double SIDE_FRONT_ELBOW_UP = 0.33;
-    public static final double SIDE_FRONT_ELBOW_DOWN = 0;
+    public static final double SIDE_FRONT_ELBOW_UP = 0.35;
+    public static final double SIDE_FRONT_ELBOW_DOWN = 0.7;
     //gripper sticks out, we will need a SIDE_FRONT_ELBOW_STOWED after phone is moved
     // public final double SIDE_FRONT_ELBOW_STOWED = [some value]; // stowed for robot inspection
-    public static final double SIDE_FRONT_ELBOW_READY = 0.15; // for auto efficiency
+    public static final double SIDE_FRONT_ELBOW_READY = 0.5; // for auto efficiency
 
     // TODO Add correct servo positions for the following:
 
     public static final double CAPSTONE_ROTATOR_INIT = 0;
-    public static final double CAPSTONE_ROTATOR_ROTATED = 0; // rotated to release position
+    public static final double CAPSTONE_ROTATOR_ROTATED = 0.66; // rotated to release position
 
-    public static final double CAPSTONE_RELEASER_HELD = 0;
+    public static final double CAPSTONE_RELEASER_HELD = 1;
     public static final double CAPSTONE_RELEASER_RELEASED = 0;
 
     // sensors

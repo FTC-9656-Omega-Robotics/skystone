@@ -26,7 +26,7 @@ public class AnythingTesterRR extends LinearOpMode {
         robot = new OmegaBotRR(telemetry, hardwareMap);
         /*
          */
-        //robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         /*
          * Instantiate an OpenCvCamera object for the camera we'll be using.
          * In this sample, we're using the phone's internal camera. We pass it a
@@ -97,10 +97,23 @@ public class AnythingTesterRR extends LinearOpMode {
         }
 
 
-        robot.capstoneRotator.setPosition(0.2);
+        robot.capstoneRotator.setPosition(OmegaBotRR.CAPSTONE_ROTATOR_ROTATED);
         sleep(500);
 
-        robot.capstoneRotator.setPosition(0.4);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_READY);
+        sleep(500);
+
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
+        sleep(500);
+
+
+
+
+        robot.capstoneReleaser.setPosition(OmegaBotRR.CAPSTONE_RELEASER_RELEASED);
+        sleep(500);
+
+
+
 
 
     }
