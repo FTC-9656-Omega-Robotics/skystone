@@ -19,14 +19,19 @@ public class StonePositionTester extends LinearOpMode {
         // robot's initial position
         final int INIT_X = -39;
         final int INIT_Y = -63;
-        final Pose2d ROBOT_INIT_POSITION = new Pose2d(INIT_X, INIT_Y,0);
+        final Pose2d ROBOT_INIT_POSITION = new Pose2d(INIT_X, INIT_Y, 0);
 
-        // TODO: tune the following x coordinates so that when strafing to that position, the gripper is in the center of the block
+        // TODO: tune the following coordinates so that when strafing to that position, the gripper is in the center of the block
         // skystone 1 is closest to bridge, skystone 6 is closest to wall
         int[] SKYSTONE_X = {-21, -29, -37, -45, -53, -61};
                // index:      0   1    2    3    4    5
                // skystone #: 1   2    3    4    5    6
-        final int SKYSTONE_Y = -35;
+
+        final int y = -35;
+        int[] SKYSTONE_Y = {y, y, y, y, y, y}; // should theoretically have same y coordinate
+        // index:           0  1  2  3  4  5
+        // skystone #:      1  2  3  4  5  6
+
 
         waitForStart();
 
@@ -45,7 +50,7 @@ public class StonePositionTester extends LinearOpMode {
             // strafe to skystone
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .strafeTo(new Vector2d(SKYSTONE_X[i], SKYSTONE_Y))
+                            .strafeTo(new Vector2d(SKYSTONE_X[i], SKYSTONE_Y[i]))
                             .build()
             );
 
@@ -66,7 +71,7 @@ public class StonePositionTester extends LinearOpMode {
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
                             // strafe right a bit to avoid knocking into other stones
-                            .strafeTo(new Vector2d(SKYSTONE_X[i], SKYSTONE_Y - 2))
+                            .strafeTo(new Vector2d(SKYSTONE_X[i], SKYSTONE_Y[i] - 2))
 
                             // strafe back to init position
                             .strafeTo(new Vector2d(INIT_X, INIT_Y))
