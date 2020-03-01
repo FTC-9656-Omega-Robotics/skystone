@@ -51,13 +51,27 @@ public class Red3Stone extends LinearOpMode {
         // TODO: generally, just check if the position constants (stuff with final in front) are accurate
 
         // 1 is closest to bridge, 6 is closest to wall
-        // each stone is 8 in long
-        final Pose2d SKYSTONE_POS_1 = new Pose2d(-29, -39, 0);
-        final Pose2d SKYSTONE_POS_2 = new Pose2d(-37, -39, 0);
-        final Pose2d SKYSTONE_POS_3 = new Pose2d(-45, -39, 0);
-        final Pose2d SKYSTONE_POS_4 = new Pose2d(-53, -39, 0);
-        final Pose2d SKYSTONE_POS_5 = new Pose2d(-61, -39, 0);
-        final Pose2d SKYSTONE_POS_6 = new Pose2d(-69, -39, 0);
+        final int SKYSTONE_Y = -35;
+
+        final Pose2d SKYSTONE_POS_1 = new Pose2d(-21, SKYSTONE_Y, 0); // testing
+        final Pose2d SKYSTONE_POS_2 = new Pose2d(-29, SKYSTONE_Y, 0); // unverified
+        final Pose2d SKYSTONE_POS_3 = new Pose2d(-37, SKYSTONE_Y, 0); // unverified
+        final Pose2d SKYSTONE_POS_4 = new Pose2d(-45, SKYSTONE_Y, 0); // testing
+        final Pose2d SKYSTONE_POS_5 = new Pose2d(-53, SKYSTONE_Y, 0); // unverified
+        final Pose2d SKYSTONE_POS_6 = new Pose2d(-61, SKYSTONE_Y, 0); // unverified
+
+        /* generalized, but may not work in practice
+        final int SKYSTONE_1_X = -21;
+        final int LENGTH_OF_STONE = 8;
+
+        final Pose2d SKYSTONE_POS_1 = new Pose2d(SKYSTONE_1_X, SKYSTONE_Y, 0);
+        final Pose2d SKYSTONE_POS_2 = new Pose2d(SKYSTONE_1_X  - (1 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
+        final Pose2d SKYSTONE_POS_3 = new Pose2d(SKYSTONE_1_X - (2 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
+        final Pose2d SKYSTONE_POS_4 = new Pose2d(SKYSTONE_1_X - (3 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
+        final Pose2d SKYSTONE_POS_5 = new Pose2d(SKYSTONE_1_X - (4 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
+        final Pose2d SKYSTONE_POS_6 = new Pose2d(SKYSTONE_1_X - (5 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
+
+        */
 
         // a bit of space between robot and neutral bridge
         final Pose2d UNDER_RED_BRIDGE_POS = new Pose2d(0, -40, 0);
@@ -71,17 +85,19 @@ public class Red3Stone extends LinearOpMode {
         final Pose2d FOUNDATION_POS = new Pose2d(35, -55, Math.toRadians(180));
 
         // far = close to wall, close = close to bridge
-        final Pose2d DUMP_POS_FAR = new Pose2d(60, -35, 0);
-        final Pose2d DUMP_POS_MID = new Pose2d(55, -35, 0);
-        final Pose2d DUMP_POS_CLOSE = new Pose2d(45, -35, 0);
+        final int DUMP_Y = -30;
+
+        final Pose2d DUMP_POS_FAR = new Pose2d(60, DUMP_Y, 0);
+        final Pose2d DUMP_POS_MID = new Pose2d(55, DUMP_Y, 0);
+        final Pose2d DUMP_POS_CLOSE = new Pose2d(45, DUMP_Y, 0);
 
         // for testing: skystonePosWall is SKYSTONE_POS_4
-        int skystoneWallX = -53;
-        int skystoneWallY = -39;
+        int skystoneWallX = -45;
+        int skystoneWallY = SKYSTONE_Y;
 
         // for testing: skystonePosBridge is SKYSTONE_POS_1
-        int skystoneBridgeX = -29;
-        int skystoneBridgeY = -39;
+        int skystoneBridgeX = -21;
+        int skystoneBridgeY = SKYSTONE_Y;
 
         // actual code: initialize these variables when the camera figures out
         // what the skystonePosition is (see while loop below)
@@ -123,7 +139,7 @@ public class Red3Stone extends LinearOpMode {
 
         // before moving, get side back elbow and gripper ready
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
 
         // set initial position
         drive.setPoseEstimate(ROBOT_INIT_POSITION);
@@ -131,19 +147,21 @@ public class Red3Stone extends LinearOpMode {
         // move to first skystone (closest to wall)
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                    .splineTo(skystonePosWall) // spline to first skystone
+                    .strafeTo(new Vector2d(skystoneWallX, skystoneWallY)) // strafe to first skystone
                 .build()
         );
 
         // pick up first skystone
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        sleep(500);
+        sleep(900);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
 
         // move to foundation to dump
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
+                        // move away from stones a bit so that the gripped stone doesn't hit the other ones when robot moves
+                    .strafeTo(new Vector2d(skystoneWallX, skystoneWallY - 3))
                     .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
                     .splineTo(DUMP_POS_FAR) // spline to farthest dumping position
                 .build()
@@ -152,28 +170,22 @@ public class Red3Stone extends LinearOpMode {
         // dump first skystone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
-        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
         sleep(500);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
 
-        // reverse direction to go back to quarry
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .reverse()
-                .build()
-        );
-
         // move to second skystone (closest to bridge)
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                    .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
+                    .reverse() // reverse direction to go back to quarry
+                        .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
                     .addMarker( () -> { // move side back elbow down a bit early for efficiency
                         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_READY);
 
                         return Unit.INSTANCE;
                     })
-                    .splineTo(skystonePosBridge) // spline to second skystone
+                    .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY)) // strafe to second skystone
                 .build()
         );
 
@@ -181,16 +193,9 @@ public class Red3Stone extends LinearOpMode {
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        sleep(500);
+        sleep(900);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
-
-        // reverse direction to go back to building zone
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .reverse()
-                .build()
-        );
 
         // move to foundation to dump
         drive.followTrajectorySync(
@@ -200,24 +205,19 @@ public class Red3Stone extends LinearOpMode {
                 .build()
         );
 
+    /*
         // dump second skystone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
-        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
         sleep(500);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
 
-        // reverse direction to go back to quarry
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .reverse()
-                .build()
-        );
-
         // move to third stone (a regular one)
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
+                        .reverse() // reverse direction to go back to quarry
                         .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
                         .addMarker( () -> { // move side back elbow down a bit early for efficiency
                             robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_READY);
@@ -232,16 +232,9 @@ public class Red3Stone extends LinearOpMode {
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        sleep(500);
+        sleep(900);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
-
-        // reverse direction to go back to building zone
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .reverse()
-                .build()
-        );
 
         // move to foundation to dump
         drive.followTrajectorySync(
@@ -254,7 +247,7 @@ public class Red3Stone extends LinearOpMode {
         // dump third stone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
-        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
+        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
         sleep(500);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
@@ -266,9 +259,8 @@ public class Red3Stone extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         // TODO: check if 90 deg is turning right or left
-                        // TODO: If any changes made to x and y of dumping pos constants, change x and y here accordingly since they're based on DUMP_POS_CLOSE
-                        .splineTo(new Pose2d(45, -35, Math.toRadians(90))) // turn 90 deg right
-                        .splineTo(new Pose2d(45, -33, Math.toRadians(90))) // back up to be close enough to grip foundation
+                        .splineTo(new Pose2d(45, DUMP_Y, Math.toRadians(90))) // turn 90 deg right
+                        .splineTo(new Pose2d(45, DUMP_Y - 1, Math.toRadians(90))) // back up to be close enough to grip foundation
                 .build()
         );
 
@@ -290,89 +282,6 @@ public class Red3Stone extends LinearOpMode {
                 .build()
         );
 
-
-        /*
-            old code below, functional as of Tue 2/25/2020
-            TODO: remove this old code if above code works relatively well/better
-
-        // commands inside the trajectory run one after another
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(skystoneWallX, skystoneWallY)) // strafe to first skystone (closest to wall)
-//                        .addMarker( () -> {
-//                            // pick up first skystone
-//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-//                            sleep(500);
-//                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-//                            sleep(500);
-//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-//                            sleep(500);
-//
-//                            return Unit.INSTANCE;
-//                        })
-                        .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
-                        .splineTo(DUMP_POS_FAR)// spline to foundation far dumping position
-//                        .addMarker( () -> {
-//                            // dump skystone
-//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-//                            sleep(500);
-//                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
-//                            sleep(500);
-//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-//                            sleep(500);
-//
-//                            return Unit.INSTANCE;
-//                        })
-                        .reverse()// reverse direction to go back for stone
-                        .splineTo(UNDER_RED_BRIDGE_POS) // spline back under bridge
-//                        .addMarker( () -> {
-//                            // put side front elbow in ready position
-//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_READY);
-//                            sleep(500);
-//
-//                            return Unit.INSTANCE;
-//                        })
-                        .splineTo(skystonePosBridge) // spline to second skystone (closest to bridge)
-//                        .addMarker( () -> {
-////                            // pick up second skystone
-////                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-////                            sleep(500);
-////                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-////                            sleep(500);
-////                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-////                            sleep(500);
-////
-////                            return Unit.INSTANCE;
-////                        })
-                        .reverse() //reverses the reverse so it goes forward again
-                        .splineTo(UNDER_RED_BRIDGE_POS)// spline to under bridge
-                        .splineTo(DUMP_POS_MID) // splines to foundation to dump skystone
-//                        .addMarker( () -> {
-//                            // dump second skystone
-//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-//                            sleep(500);
-//                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_OPEN);
-//                            sleep(500);
-//                            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-//                            sleep(500);
-//
-//                            return Unit.INSTANCE;
-//                        })
-                        .reverse() // reverse direction to go back for stone
-                        .splineTo(SKYSTONE_POS_1)
-                        .reverse()
-                        .splineTo(UNDER_RED_BRIDGE_POS)
-                        .splineTo(DUMP_POS_CLOSE)
-                        // do third (regular) stone
-                        // move foundation
-                        // park under skybridge
-                        .build()
-
-
-        );
-
-        drive.turnSync(Math.toRadians(90));
-
-        */
+         */
     }
 }
