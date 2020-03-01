@@ -16,6 +16,7 @@ public class StonePositionTester extends LinearOpMode {
         OmegaBotRR robot = new OmegaBotRR(telemetry, hardwareMap);
         SampleMecanumDriveBase drive = new SampleMecanumDriveREV(hardwareMap);
 
+        // robot's initial position
         final int INIT_X = -39;
         final int INIT_Y = -63;
         final Pose2d ROBOT_INIT_POSITION = new Pose2d(INIT_X, INIT_Y,0);
