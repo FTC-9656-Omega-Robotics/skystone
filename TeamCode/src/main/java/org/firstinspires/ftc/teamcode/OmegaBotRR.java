@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.app.Activity;
 import android.view.View;
-
+import com.qualcomm.robotcore.util.ThreadPool;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,12 +20,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 /**
  * Hardware mapping for SkyStone 2019
  */
 
-public class OmegaBotRR {
+public class OmegaBotRR{
     // telemetry and hardwaremap come from each opmode
     public Telemetry telemetry;
     public HardwareMap hardwareMap;
@@ -204,4 +205,40 @@ public class OmegaBotRR {
 //
 //        return correction;
 //    }
-    } }
+    }
+
+    public final void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    public void pickUpWithBackGripper(){
+        sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        sleep(500);
+        sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+        sleep(900);
+        sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        sleep(500);
+    }
+
+    public void releaseWithBackGripper(){
+        sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        sleep(500);
+        sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
+        sleep(500);
+        sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        sleep(500);
+    }
+
+    public void pickUpWithFrontGripper(){
+        sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
+        sleep(500);
+        sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
+        sleep(900);
+        sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
+        sleep(500);
+
+    }
+}
