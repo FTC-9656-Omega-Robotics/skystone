@@ -10,11 +10,14 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 
 @Autonomous (name = "Stone Position Tester")
 public class StonePositionTester extends LinearOpMode {
+    OmegaBotRR robot;
+    SampleMecanumDriveBase drive;
+
     @Override
     public void runOpMode() throws InterruptedException {
         // initialize robot and drivetrain
-        OmegaBotRR robot = new OmegaBotRR(telemetry, hardwareMap);
-        SampleMecanumDriveBase drive = new SampleMecanumDriveREV(hardwareMap);
+        robot = new OmegaBotRR(telemetry, hardwareMap);
+        drive = new SampleMecanumDriveREV(hardwareMap);
 
         // robot's initial position
         final int INIT_X = -39;
@@ -44,40 +47,43 @@ public class StonePositionTester extends LinearOpMode {
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
 
-        // strafe from init position to each skystone
-        // at each skystone, pickup block and then put it back down
-        for (int i = 0; i < SKYSTONE_X.length; i++) {
-            // strafe to skystone
-            drive.followTrajectorySync(
-                    drive.trajectoryBuilder()
-                            .strafeTo(new Vector2d(SKYSTONE_X[i], SKYSTONE_Y[i]))
-                            .build()
-            );
+        // strafe from init position to skystone
+        // pickup block at that skystone and then put it back down
+        testPosition(0, SKYSTONE_X, SKYSTONE_Y, INIT_X, INIT_Y);
+    }
 
-            // pick up skystone and put it back down
-            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-            sleep(750);
+    // strafe from init position to each skystone
+    // at each skystone, pickup block and then put it back down
+    public void testPosition(int stone, int[] SKYSTONE_X, int[] SKYSTONE_Y, int INIT_X, int INIT_Y) {
+        // strafe to skystone
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .strafeTo(new Vector2d(SKYSTONE_X[stone], SKYSTONE_Y[stone]))
+                        .build()
+        );
 
-            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-            sleep(500);
+        // pick up skystone and put it back down
+        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+        sleep(750);
 
-            robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-            sleep(500);
+        robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        sleep(500);
 
-            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
-            sleep(500);
+        robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        sleep(500);
 
-            // strafe back to init position
-            drive.followTrajectorySync(
-                    drive.trajectoryBuilder()
-                            // strafe right a bit to avoid knocking into other stones
-                            .strafeTo(new Vector2d(SKYSTONE_X[i], SKYSTONE_Y[i] - 2))
+        robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
+        sleep(500);
 
-                            // strafe back to init position
-                            .strafeTo(new Vector2d(INIT_X, INIT_Y))
-                            .build()
-            );
+        // strafe back to init position
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        // strafe right a bit to avoid knocking into other stones
+                        .strafeTo(new Vector2d(SKYSTONE_X[stone], SKYSTONE_Y[stone] - 2))
 
-        }
+                        // strafe back to init position
+                        .strafeTo(new Vector2d(INIT_X, INIT_Y))
+                        .build()
+        );
     }
 }
