@@ -20,17 +20,18 @@ public class StonePositionTester extends LinearOpMode {
         drive = new SampleMecanumDriveREV(hardwareMap);
 
         // robot's initial position
-        final int INIT_X = -39;
-        final int INIT_Y = -63;
+        final int INIT_X = -35;
+        final int INIT_Y = -59;
         final Pose2d ROBOT_INIT_POSITION = new Pose2d(INIT_X, INIT_Y, 0);
 
         // TODO: tune the following coordinates so that when strafing to that position, the gripper is in the center of the block
+        // Coordinates are given to pick up with back gripper
         // skystone 1 is closest to bridge, skystone 6 is closest to wall
-        int[] SKYSTONE_X = {-21, -29, -37, -45, -53, -61};
+        int[] SKYSTONE_X = {-14, -22, -30, -38, -46, -54};
                // index:      0   1    2    3    4    5
                // skystone #: 1   2    3    4    5    6
 
-        final int y = -35;
+        final int y = -28;
         int[] SKYSTONE_Y = {y, y, y, y, y, y}; // should theoretically have same y coordinate
         // index:           0  1  2  3  4  5
         // skystone #:      1  2  3  4  5  6
@@ -49,7 +50,7 @@ public class StonePositionTester extends LinearOpMode {
 
         // strafe from init position to skystone
         // pickup block at that skystone and then put it back down
-        testPosition(0, SKYSTONE_X, SKYSTONE_Y, INIT_X, INIT_Y);
+        testPosition(5, SKYSTONE_X, SKYSTONE_Y, INIT_X, INIT_Y);
     }
 
     // strafe from init position to each skystone
@@ -64,7 +65,7 @@ public class StonePositionTester extends LinearOpMode {
 
         // pick up skystone and put it back down
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        sleep(750);
+        sleep(1100);
 
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);

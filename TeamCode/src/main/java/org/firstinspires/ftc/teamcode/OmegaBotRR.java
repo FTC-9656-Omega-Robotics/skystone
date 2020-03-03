@@ -73,7 +73,7 @@ public class OmegaBotRR{
     public static final double SIDE_BACK_GRIPPER_STOWED = 0.63; // stowed for robot inspection
 
     public static final double SIDE_BACK_ELBOW_UP = 0.31;
-    public static final double SIDE_BACK_ELBOW_DOWN = 0;
+    public static final double SIDE_BACK_ELBOW_DOWN = 0.02;
     public static final double SIDE_BACK_ELBOW_READY = 0.15; // for auto efficiency
 
     public static final double SIDE_FRONT_GRIPPER_OPEN = 0.91;

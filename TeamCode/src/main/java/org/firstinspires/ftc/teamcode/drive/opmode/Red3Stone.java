@@ -46,67 +46,64 @@ public class Red3Stone extends LinearOpMode {
         phoneCam.setPipeline(skyStoneDetector);
         phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
 
-        // TODO: generally, just check if the position constants (stuff with final in front) are accurate
-
-        final Pose2d ROBOT_INIT_POSITION = new Pose2d(-39,-63,0);
+        final int INIT_X = -35;
+        final int INIT_Y = -59;
+        final Pose2d ROBOT_INIT_POSITION = new Pose2d(INIT_X, INIT_Y, 0);
 
         // 1 is closest to bridge, 6 is closest to wall
-        final int SKYSTONE_Y = -35;
+        final int SKYSTONE_1_X = -8; // edited from tested position
+        final int SKYSTONE_2_X = -22;
+        final int SKYSTONE_3_X = -30;
+        final int SKYSTONE_4_X = -38; // works if you strafe right after init position
+        final int SKYSTONE_5_X = -46;
+        final int SKYSTONE_6_X = -54;
 
-        final Pose2d SKYSTONE_POS_1 = new Pose2d(-21, SKYSTONE_Y, 0); // testing
-        final Pose2d SKYSTONE_POS_2 = new Pose2d(-29, SKYSTONE_Y, 0); // unverified
-        final Pose2d SKYSTONE_POS_3 = new Pose2d(-37, SKYSTONE_Y, 0); // unverified
-        final Pose2d SKYSTONE_POS_4 = new Pose2d(-45, SKYSTONE_Y, 0); // testing
-        final Pose2d SKYSTONE_POS_5 = new Pose2d(-53, SKYSTONE_Y, 0); // unverified
-        final Pose2d SKYSTONE_POS_6 = new Pose2d(-61, SKYSTONE_Y, 0); // unverified
+        final int SKYSTONE_1_Y = -26; // edited from tested position
+        final int SKYSTONE_2_Y = -28;
+        final int SKYSTONE_3_Y = -28;
+        final int SKYSTONE_4_Y = -28; // works if you strafe right after init position
+        final int SKYSTONE_5_Y = -28;
+        final int SKYSTONE_6_Y = -28;
 
-        /* generalized, but may not work in practice
-        final int SKYSTONE_1_X = -21;
-        final int LENGTH_OF_STONE = 8;
-
-        final Pose2d SKYSTONE_POS_1 = new Pose2d(SKYSTONE_1_X, SKYSTONE_Y, 0);
-        final Pose2d SKYSTONE_POS_2 = new Pose2d(SKYSTONE_1_X  - (1 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
-        final Pose2d SKYSTONE_POS_3 = new Pose2d(SKYSTONE_1_X - (2 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
-        final Pose2d SKYSTONE_POS_4 = new Pose2d(SKYSTONE_1_X - (3 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
-        final Pose2d SKYSTONE_POS_5 = new Pose2d(SKYSTONE_1_X - (4 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
-        final Pose2d SKYSTONE_POS_6 = new Pose2d(SKYSTONE_1_X - (5 * LENGTH_OF_STONE), SKYSTONE_Y, 0);
-
-        */
+        // TODO: tune coordinates below
 
         // a bit of space between robot and neutral bridge
-        final Pose2d UNDER_RED_BRIDGE_POS = new Pose2d(0, -40, 0);
+        final int UNDER_RED_BRIDGE_X = 0;
+        final int UNDER_RED_BRIDGE_Y = -32;
 
         // parked position
-        // TODO: check if 180 deg heading makes robot face wall that touches stones
-        final Pose2d PARKED = new Pose2d(0, -36, Math.toRadians(180));
+        final int PARKED_X = 0;
+        final int PARKED_Y = -18;
 
         // after gripping foundation, splines to this position to move foundation into building site
-        // TODO: check if 180 deg heading makes robot face wall that touches stones
-        final Pose2d FOUNDATION_POS = new Pose2d(35, -55, Math.toRadians(180));
+        final Pose2d FOUNDATION_END_POS = new Pose2d(40, -50, Math.toRadians(180));
+        //working x: 35, y: -47
 
         // far = close to wall, close = close to bridge
-        final int DUMP_Y = -30;
+        final int DUMP_FAR_X = 68;
+        final int DUMP_MID_X = 65;
+        final int DUMP_CLOSE_X = 60;
 
-        final Pose2d DUMP_POS_FAR = new Pose2d(60, DUMP_Y, 0);
-        final Pose2d DUMP_POS_MID = new Pose2d(55, DUMP_Y, 0);
-        final Pose2d DUMP_POS_CLOSE = new Pose2d(45, DUMP_Y, 0);
+        final int DUMP_FAR_Y = -25;
+        final int DUMP_MID_Y = -25;
+        final int DUMP_CLOSE_Y = -25;
 
-        // for testing: skystonePosWall is SKYSTONE_POS_4
-        int skystoneWallX = -45;
-        int skystoneWallY = SKYSTONE_Y;
+        // for testing: skystonePosWall is skystone 4
+        int skystoneWallX = SKYSTONE_4_X;
+        int skystoneWallY = SKYSTONE_4_Y;
 
-        // for testing: skystonePosBridge is SKYSTONE_POS_1
-        int skystoneBridgeX = -21;
-        int skystoneBridgeY = SKYSTONE_Y;
+        // for testing: skystonePosBridge is skystone 1
+        int skystoneBridgeX = SKYSTONE_1_X;
+        int skystoneBridgeY = SKYSTONE_1_Y;
 
         // actual code: initialize these variables when the camera figures out
         // what the skystonePosition is (see while loop below)
         // initialized for testing
-        Pose2d skystonePosWall = SKYSTONE_POS_4; // position of skystone closest to the wall
-        Pose2d skystonePosBridge = SKYSTONE_POS_1; // position of skystone closest to the bridge
+        Pose2d skystonePosWall = new Pose2d(SKYSTONE_4_X, SKYSTONE_4_Y, 0); // position of skystone closest to the wall, skystone 4 for testing
+        Pose2d skystonePosBridge = new Pose2d(SKYSTONE_1_X, SKYSTONE_1_Y, 0); // position of skystone closest to the bridge, skystone 1 for testing
 
         // initialized for testing
-        Pose2d nearestStone = SKYSTONE_POS_2; // position of nearest regular stone to pick up
+        Pose2d nearestStone = new Pose2d(SKYSTONE_2_X, SKYSTONE_2_Y, 0); // position of nearest regular stone to pick up
 
         double positionCorrector = 0;
         //All comments comment above what is being commented
@@ -162,8 +159,8 @@ public class Red3Stone extends LinearOpMode {
                 drive.trajectoryBuilder()
                         // move away from stones a bit so that the gripped stone doesn't hit the other ones when robot moves
                     .strafeTo(new Vector2d(skystoneWallX, skystoneWallY - 3))
-                    .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
-                    .splineTo(DUMP_POS_FAR) // spline to farthest dumping position
+                    .splineTo(new Pose2d(UNDER_RED_BRIDGE_X, UNDER_RED_BRIDGE_Y, Math.toRadians(-10))) // spline to under red bridge
+                    .splineTo(new Pose2d(DUMP_FAR_X, DUMP_FAR_Y, 0)) // spline to farthest dumping position
                 .build()
         );
 
@@ -179,7 +176,7 @@ public class Red3Stone extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                     .reverse() // reverse direction to go back to quarry
-                        .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
+                        .splineTo(new Pose2d(UNDER_RED_BRIDGE_X, UNDER_RED_BRIDGE_Y, 0)) // spline to under red bridge
                     .addMarker( () -> { // move side back elbow down a bit early for efficiency
                         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_READY);
 
@@ -200,12 +197,15 @@ public class Red3Stone extends LinearOpMode {
         // move to foundation to dump
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
-                        .splineTo(DUMP_POS_MID) // spline to middle dumping position
+                        // move away from stones a bit so that the gripped stone doesn't hit the other ones when robot moves
+                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY - 3))
+                        .strafeTo(new Vector2d(UNDER_RED_BRIDGE_X, UNDER_RED_BRIDGE_Y)) // strafe to under red bridge
+                        .splineTo(new Pose2d(DUMP_MID_X, DUMP_MID_Y, 0)) // spline to middle dumping position
+                        .strafeTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y + 6)) // strafe closer to foundation (to left)
                 .build()
         );
 
-    /*
+
         // dump second skystone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
@@ -213,6 +213,8 @@ public class Red3Stone extends LinearOpMode {
         sleep(500);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
+
+        /*
 
         // move to third stone (a regular one)
         drive.followTrajectorySync(
@@ -252,15 +254,20 @@ public class Red3Stone extends LinearOpMode {
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
 
+         */
+
+
         // get foundation gripper ready for pull
         robot.foundationGripper.setPosition(OmegaBotRR.FOUNDATION_GRIPPER_READY);
 
-        // move to grip foundation
+        // turn 90 deg right to grip foundation
+        drive.turnSync(Math.toRadians(-90));
+
+        // back up to grip foundation
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        // TODO: check if 90 deg is turning right or left
-                        .splineTo(new Pose2d(45, DUMP_Y, Math.toRadians(90))) // turn 90 deg right
-                        .splineTo(new Pose2d(45, DUMP_Y - 1, Math.toRadians(90))) // back up to be close enough to grip foundation
+                        .reverse() // reverse to back up
+                        .lineTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y + 12))
                 .build()
         );
 
@@ -271,17 +278,19 @@ public class Red3Stone extends LinearOpMode {
         // to move foundation into building site
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(FOUNDATION_POS) // spline to ending position after pulling foundation
+                        .splineTo(FOUNDATION_END_POS) // spline to ending position after pulling foundation
                 .build()
         );
+
+        // ungrip foundation
+        robot.foundationGripper.setPosition(OmegaBotRR.FOUNDATION_GRIPPER_UP);
+        sleep(1000);
 
         // park under red bridge
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(PARKED) // spline to parking position
+                        .strafeTo(new Vector2d(PARKED_X, PARKED_Y)) // strafe to parking position
                 .build()
         );
-
-         */
     }
 }
