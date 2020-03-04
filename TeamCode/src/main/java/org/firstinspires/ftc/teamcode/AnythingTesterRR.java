@@ -88,7 +88,7 @@ public class AnythingTesterRR extends LinearOpMode {
             telemetry.update();
         }
 
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED);
+        /*robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED);
         sleep(1000);
 
         robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_OPEN);
@@ -96,5 +96,9 @@ public class AnythingTesterRR extends LinearOpMode {
 
         robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
         sleep(1000);
+         */
+
+        robot.sideBackElbow.setPosition(0);
+        sleep(10000);
     }
 }
