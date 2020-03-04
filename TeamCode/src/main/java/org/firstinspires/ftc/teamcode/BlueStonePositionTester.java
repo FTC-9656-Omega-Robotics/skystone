@@ -36,6 +36,9 @@ public class BlueStonePositionTester extends LinearOpMode {
         // index:           0  1  2  3  4  5
         // skystone #:      1  2  3  4  5  6
 
+        // stone # that we are currently testing (NOT the index)
+        int stone = 1;
+
 
         waitForStart();
 
@@ -50,16 +53,24 @@ public class BlueStonePositionTester extends LinearOpMode {
 
         // strafe from init position to skystone
         // pickup block at that skystone and then put it back down
-        testPosition(5, SKYSTONE_X, SKYSTONE_Y, INIT_X, INIT_Y);
+        testPosition(stone, SKYSTONE_X, SKYSTONE_Y, INIT_X, INIT_Y);
     }
 
-    // strafe from init position to each skystone
-    // at each skystone, pickup block and then put it back down
+    /**
+     * Strafe from init position to skystone at a given position
+     * At that skystone, pickup the block and then put it back down
+     *
+     * @param stone       stone number that is currently being tested (from 1-6)
+     * @param SKYSTONE_X  array of x coordinates of skystones
+     * @param SKYSTONE_Y  array of y coordinates of skystones
+     * @param INIT_X      x coordinate of init position
+     * @param INIT_Y      y coordinate of init position
+     */
     public void testPosition(int stone, int[] SKYSTONE_X, int[] SKYSTONE_Y, int INIT_X, int INIT_Y) {
         // strafe to skystone
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(SKYSTONE_X[stone], SKYSTONE_Y[stone]))
+                        .strafeTo(new Vector2d(SKYSTONE_X[stone - 1], SKYSTONE_Y[stone - 1]))
                         .build()
         );
 
@@ -80,7 +91,7 @@ public class BlueStonePositionTester extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         // strafe left a bit to avoid knocking into other stones
-                        .strafeTo(new Vector2d(SKYSTONE_X[stone], SKYSTONE_Y[stone] + 2))
+                        .strafeTo(new Vector2d(SKYSTONE_X[stone], SKYSTONE_Y[stone - 1] + 2))
 
                         // strafe back to init position
                         .strafeTo(new Vector2d(INIT_X, INIT_Y))
