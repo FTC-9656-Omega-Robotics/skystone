@@ -76,21 +76,21 @@ public class OmegaBot {
 
     public static final double SIDE_BACK_GRIPPER_OPEN = 0.41;
     public static final double SIDE_BACK_GRIPPER_CLOSED = 0;
-    public static final double SIDE_BACK_GRIPPER_STOWED = 0.63; // stowed for robot inspection
+    public static final double SIDE_BACK_GRIPPER_STOWED = 0.63; // stowed for safe travel under bridge
+    public static final double SIDE_BACK_GRIPPER_READY = 0.45; // slightly closed for auto efficiency
 
     public static final double SIDE_BACK_ELBOW_UP = 0.31;
     public static final double SIDE_BACK_ELBOW_DOWN = 0.02;
-    public static final double SIDE_BACK_ELBOW_READY = 0.15; // for auto efficiency
+    public static final double SIDE_BACK_ELBOW_READY = 0.15; // slightly down for auto efficiency
 
     public static final double SIDE_FRONT_GRIPPER_OPEN = 0.91;
     public static final double SIDE_FRONT_GRIPPER_CLOSED = 0.56;
-    public static final double SIDE_FRONT_GRIPPER_STOWED = 0.35; // stowed for robot inspection
+    public static final double SIDE_FRONT_GRIPPER_STOWED = 0.35; // stowed for safe travel under bridge
+    // public static final double SIDE_FRONT_GRIPPER_READY = [?]; // slightly closed for auto efficiency
 
     public static final double SIDE_FRONT_ELBOW_UP = 0.35;
     public static final double SIDE_FRONT_ELBOW_DOWN = 0.7;
-    //gripper sticks out, we will need a SIDE_FRONT_ELBOW_STOWED after phone is moved
-    // public final double SIDE_FRONT_ELBOW_STOWED = [some value]; // stowed for robot inspection
-    public static final double SIDE_FRONT_ELBOW_READY = 0.5; // for auto efficiency
+    public static final double SIDE_FRONT_ELBOW_READY = 0.5; // slightly down for auto efficiency
 
     // TODO Add correct servo positions for the following:
 

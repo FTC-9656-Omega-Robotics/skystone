@@ -66,12 +66,7 @@ public class AnythingTesterRR extends LinearOpMode {
          * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
          * away from the user.
          */
-        phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_LEFT);
-
-        // number of inches the robot strafes back depending
-        // on the position of the skystone closest to the Skybridge
-        double back = 0;
-        //All comments comment above what is being commented
+        phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
 
         waitForStart();
 
@@ -79,15 +74,12 @@ public class AnythingTesterRR extends LinearOpMode {
             xPosition = skyStoneDetector.foundRectangle().x;
             yPosition = skyStoneDetector.foundRectangle().y;
 
-            if (xPosition >= 60) { //TODO Tune these numbers
-                skystonePosition = "right";
-                back = 3;
-            } else if (xPosition > 2) {//x = 12
-                skystonePosition = "center";
-                back = 7.5;
+            if ((xPosition >= 140 && xPosition <= 180)||(xPosition >= 60 && xPosition <= 90)) { //TODO Tune these numbers
+                skystonePosition = "1";
+            } else if ((xPosition >= 260)||(xPosition >= 91 && xPosition <= 110)) {//x = 12
+                skystonePosition = "2";
             } else {
-                skystonePosition = "left";
-                back = 12;
+                skystonePosition = "3";
             }
 
             telemetry.addData("xPos", xPosition);
@@ -95,26 +87,5 @@ public class AnythingTesterRR extends LinearOpMode {
             telemetry.addData("SkyStone Pos", skystonePosition);
             telemetry.update();
         }
-
-
-        robot.capstoneRotator.setPosition(OmegaBotRR.CAPSTONE_ROTATOR_ROTATED);
-        sleep(500);
-
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_READY);
-        sleep(500);
-
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
-        sleep(500);
-
-
-
-
-        robot.capstoneReleaser.setPosition(OmegaBotRR.CAPSTONE_RELEASER_RELEASED);
-        sleep(500);
-
-
-
-
-
     }
 }
