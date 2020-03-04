@@ -83,9 +83,9 @@ public class OmegaBot {
     public static final double SIDE_BACK_ELBOW_DOWN = 0.02;
     public static final double SIDE_BACK_ELBOW_READY = 0.15; // slightly down for auto efficiency
 
-    public static final double SIDE_FRONT_GRIPPER_OPEN = 0.91;
-    public static final double SIDE_FRONT_GRIPPER_CLOSED = 0.56;
-    public static final double SIDE_FRONT_GRIPPER_STOWED = 0.35; // stowed for safe travel under bridge
+    public static final double SIDE_FRONT_GRIPPER_OPEN = 0.5;
+    public static final double SIDE_FRONT_GRIPPER_CLOSED = 0.1;
+    public static final double SIDE_FRONT_GRIPPER_STOWED = 0; // stowed for safe travel under bridge
     // public static final double SIDE_FRONT_GRIPPER_READY = [?]; // slightly closed for auto efficiency
 
     public static final double SIDE_FRONT_ELBOW_UP = 0.35;

@@ -210,9 +210,9 @@ public class Blue3StoneModular extends LinearOpMode {
      * @param bridgeAngle      angle, in degrees, of the heading of the robot when it moves under the bridge the first time
      */
     public void executeAutoPath(int skystoneBridgeX, int skystoneBridgeY, int skystoneWallX, int skystoneWallY, int stoneX, int stoneY, int bridgeAngle) {
-        // before moving, get side back elbow and gripper ready
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_READY);
+        // before moving, get side front elbow and gripper ready
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_OPEN);
 
         // set initial position
         drive.setPoseEstimate(ROBOT_INIT_POSITION);
@@ -225,9 +225,9 @@ public class Blue3StoneModular extends LinearOpMode {
         );
 
         // pick up first skystone
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
         sleep(900);
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
         sleep(500);
 
         // move to foundation to dump
@@ -241,11 +241,11 @@ public class Blue3StoneModular extends LinearOpMode {
         );
 
         // dump first skystone
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
         sleep(500);
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED);
         sleep(500);
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
         sleep(500);
 
         // move to second skystone (closest to bridge)
@@ -254,9 +254,9 @@ public class Blue3StoneModular extends LinearOpMode {
                         .reverse() // reverse direction to go back to quarry
                         .splineTo(new Pose2d(UNDER_BLUE_BRIDGE_X, UNDER_BLUE_BRIDGE_Y, 0)) // spline to under blue bridge
                         .addMarker( () -> {
-                            // move side back elbow and side back gripper down a bit early for efficiency
-                            robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_READY);
-                            robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_READY);
+                            // move side front elbow gripper down a bit early for efficiency
+                            robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_READY);
+                            robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_OPEN);
 
                             return Unit.INSTANCE;
                         })
@@ -265,11 +265,11 @@ public class Blue3StoneModular extends LinearOpMode {
         );
 
         // pick up second skystone
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
         sleep(500);
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
         sleep(900);
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
         sleep(500);
 
         // move to foundation to dump
@@ -285,11 +285,11 @@ public class Blue3StoneModular extends LinearOpMode {
 
 
         // dump second skystone
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
         sleep(500);
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED);
         sleep(500);
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
         sleep(500);
 
         /*
@@ -299,8 +299,9 @@ public class Blue3StoneModular extends LinearOpMode {
                 drive.trajectoryBuilder()
                         .reverse() // reverse direction to go back to quarry
                         .splineTo(UNDER_BLUE_BRIDGE_POS) // spline to under blue bridge
-                        .addMarker( () -> { // move side back elbow down a bit early for efficiency
-                            robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_READY);
+                        .addMarker( () -> { // move side front elbow and gripper down a bit early for efficiency
+                            robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_READY);
+                            robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_OPEN);
 
                             return Unit.INSTANCE;
                         })
@@ -309,11 +310,11 @@ public class Blue3StoneModular extends LinearOpMode {
         );
 
         // pick up third stone
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
         sleep(500);
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
         sleep(900);
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
         sleep(500);
 
         // move to foundation to dump
@@ -327,11 +328,11 @@ public class Blue3StoneModular extends LinearOpMode {
         );
 
         // dump third stone
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
         sleep(500);
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED);
         sleep(500);
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
         sleep(500);
 
          */

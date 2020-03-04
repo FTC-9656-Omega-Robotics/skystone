@@ -300,8 +300,9 @@ public class Red3StoneModular extends LinearOpMode {
                 drive.trajectoryBuilder()
                         .reverse() // reverse direction to go back to quarry
                         .splineTo(UNDER_RED_BRIDGE_POS) // spline to under red bridge
-                        .addMarker( () -> { // move side back elbow down a bit early for efficiency
+                        .addMarker( () -> { // move side back elbow and gripper down a bit early for efficiency
                             robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_READY);
+                            robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_READY);
 
                             return Unit.INSTANCE;
                         })
