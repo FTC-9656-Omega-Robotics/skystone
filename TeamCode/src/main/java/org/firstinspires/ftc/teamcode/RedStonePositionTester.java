@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 
-@Autonomous (name = "Stone Position Tester")
-public class StonePositionTester extends LinearOpMode {
+@Autonomous (name = "Red Stone Position Tester")
+public class RedStonePositionTester extends LinearOpMode {
     OmegaBotRR robot;
     SampleMecanumDriveBase drive;
 
