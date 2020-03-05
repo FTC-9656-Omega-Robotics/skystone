@@ -118,6 +118,8 @@ public class LinearTeleop extends LinearOpMode {
             robot.foundationGripper.setPosition(OmegaBot.FOUNDATION_GRIPPER_DOWN);
         } else if (gamepad1.right_trigger > 0.5) {
             robot.foundationGripper.setPosition(OmegaBot.FOUNDATION_GRIPPER_UP);
+        } else if (gamepad2.dpad_right) {
+            robot.foundationGripper.setPosition(OmegaBot.FOUNDATION_GRIPPER_READY);
         }
     }
 
