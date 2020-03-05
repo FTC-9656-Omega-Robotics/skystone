@@ -95,10 +95,6 @@ public class Red3StoneModular extends LinearOpMode {
     int stoneX;
     int stoneY;
 
-    // heading in degrees of robot for the first time it splines
-    // under the bridge (after picking up first skystone)
-    int bridgeAngle;
-
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -122,44 +118,52 @@ public class Red3StoneModular extends LinearOpMode {
 
         // ------------ CHOOSING AN AUTO PATH --------------
 
+        // TODO: figure out xPos ranges for CV
+
         // use CV to detect location of the skystone
         while (!isStopRequested() && !opModeIsActive()) {
             xPosition = skyStoneDetector.foundRectangle().x;
             yPosition = skyStoneDetector.foundRectangle().y;
 
-            if (xPosition >= 180 || xPosition < 40) {
+            boolean skystoneAtPos1 = xPosition >= 180 || xPosition < 40;
+            boolean skystoneAtPos2 = xPosition > 130;
+
+            if (skystoneAtPos1) {
                 skystonePosition = "1";
 
-                // skystoneWallX = [SKYSTONE_POS_X];
-                // skystoneWallY = [SKYSTONE_POS_Y];
+                // skystoneWallX = SKYSTONE_4_X;
+                // skystoneWallY = SKYSTONE_4_Y;
 
-                // skystoneBridgeX = [SKYSTONE_POS + 3_X];
-                // skystoneBridgeX = [SKYSTONE_POS + 3_X];
+                // skystoneBridgeX = SKYSTONE_1_X;
+                // skystoneBridgeX = SKYSTONE_1_X;
 
-                // stoneX = [?]; // stone [#]
-                // stoneY = [?]; // stone [#]
-            } else if (xPosition > 130) {//x = 12
+                // nearest regular stone is at pos 2
+                // stoneX = [?];
+                // stoneY = [?];
+            } else if (skystoneAtPos2) {
                 skystonePosition = "2";
 
-                // skystoneWallX = [SKYSTONE_POS_X];
-                // skystoneWallY = [SKYSTONE_POS_Y];
+                // skystoneWallX = SKYSTONE_5_X;
+                // skystoneWallY = SKYSTONE_5_Y;
 
-                // skystoneBridgeX = [SKYSTONE_POS + 3_X];
-                // skystoneBridgeX = [SKYSTONE_POS + 3_X];
+                // skystoneBridgeX = SKYSTONE_2_X;
+                // skystoneBridgeX = SKYSTONE_2_X;
 
-                // stoneX = [?]; // stone [#]
-                // stoneY = [?]; // stone [#]
+                // nearest regular stone is at pos 1
+                // stoneX = [?];
+                // stoneY = [?];
             } else {
                 skystonePosition = "3";
 
-                // skystoneWallX = [SKYSTONE_POS_X];
-                // skystoneWallY = [SKYSTONE_POS_Y];
+                // skystoneWallX = SKYSTONE_6_X;
+                // skystoneWallY = SKYSTONE_6_Y;
 
-                // skystoneBridgeX = [SKYSTONE_POS + 3_X];
-                // skystoneBridgeX = [SKYSTONE_POS + 3_X];
+                // skystoneBridgeX = SKYSTONE_3_X;
+                // skystoneBridgeX = SKYSTONE_3_X;
 
-                // stoneX = [?]; // stone [#]
-                // stoneY = [?]; // stone [#]
+                // nearest regular stone is at pos 1
+                // stoneX = [?];
+                // stoneY = [?];
             }
 
             telemetry.addData("xPos", xPosition);
@@ -184,11 +188,7 @@ public class Red3StoneModular extends LinearOpMode {
         stoneX = 0; // null
         stoneY = 0; // null
 
-        // TODO: add if-else statement to account for different bridge angles
-        bridgeAngle = -10; // skystone pos 1-4 and 2-5
-        bridgeAngle = -5; // skystone pos 3-6
-
-        executeAutoPath(skystoneBridgeX, skystoneBridgeY, skystoneWallX, skystoneWallY, stoneX, stoneY, bridgeAngle);
+        executeAutoPath(skystoneBridgeX, skystoneBridgeY, skystoneWallX, skystoneWallY, stoneX, stoneY);
     }
 
     /**
@@ -208,9 +208,11 @@ public class Red3StoneModular extends LinearOpMode {
      * @param skystoneWallY    y coordinate of skystone closest to the wall
      * @param stoneX           x coordinate of regular stone closest to the bridge
      * @param stoneY           y coordinate of regular stone closest to the bridge
-     * @param bridgeAngle      angle, in degrees, of the heading of the robot when it moves under the bridge the first time
      */
-    public void executeAutoPath(int skystoneBridgeX, int skystoneBridgeY, int skystoneWallX, int skystoneWallY, int stoneX, int stoneY, int bridgeAngle) {
+    public void executeAutoPath(int skystoneBridgeX, int skystoneBridgeY, int skystoneWallX, int skystoneWallY, int stoneX, int stoneY) {
+        // heading of robot (in deg) when it first moves under red bridge
+        final int BRIDGE_ANGLE = -5;
+
         // before moving, get side back elbow and gripper ready
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_READY);
@@ -236,7 +238,7 @@ public class Red3StoneModular extends LinearOpMode {
                 drive.trajectoryBuilder()
                         // move away from stones a bit so that the gripped stone doesn't hit the other ones when robot moves
                         .strafeTo(new Vector2d(skystoneWallX, skystoneWallY - 3))
-                        .splineTo(new Pose2d(UNDER_RED_BRIDGE_X, UNDER_RED_BRIDGE_Y, Math.toRadians(bridgeAngle))) // spline to under red bridge
+                        .splineTo(new Pose2d(UNDER_RED_BRIDGE_X, UNDER_RED_BRIDGE_Y, Math.toRadians(BRIDGE_ANGLE))) // spline to under red bridge
                         .splineTo(new Pose2d(DUMP_FAR_X, DUMP_FAR_Y, 0)) // spline to farthest dumping position
                         .build()
         );
