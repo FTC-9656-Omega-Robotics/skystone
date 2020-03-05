@@ -86,13 +86,11 @@ public class OmegaBot {
     public static final double SIDE_FRONT_GRIPPER_OPEN = 0.5;
     public static final double SIDE_FRONT_GRIPPER_CLOSED = 0.1;
     public static final double SIDE_FRONT_GRIPPER_STOWED = 0; // stowed for safe travel under bridge
-    // public static final double SIDE_FRONT_GRIPPER_READY = [?]; // slightly closed for auto efficiency
+    public static final double SIDE_FRONT_GRIPPER_READY = 0.6; // slightly closed for auto efficiency
 
     public static final double SIDE_FRONT_ELBOW_UP = 0.35;
     public static final double SIDE_FRONT_ELBOW_DOWN = 0.7;
-    public static final double SIDE_FRONT_ELBOW_READY = 0.5; // slightly down for auto efficiency
-
-    // TODO Add correct servo positions for the following:
+    public static final double SIDE_FRONT_ELBOW_READY = 0.6; // slightly down for auto efficiency
 
     public static final double CAPSTONE_ROTATOR_INIT = 0;
     public static final double CAPSTONE_ROTATOR_ROTATED = 0.66; // rotated to release position
