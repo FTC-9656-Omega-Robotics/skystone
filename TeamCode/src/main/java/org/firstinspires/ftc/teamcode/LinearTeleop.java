@@ -81,12 +81,6 @@ public class LinearTeleop extends LinearOpMode {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
             sleep(200);
 
-            // moves arm back to init position
-            armPos = OmegaBot.ARM_INIT;
-            robot.arm.setTargetPosition(armPos);
-            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            sleep(500);
-
             // ----------- CODE BELOW IS EXPERIMENTAL -------------
 
             // only resets pickedUp if the block was outtaken by the arm
@@ -97,6 +91,12 @@ public class LinearTeleop extends LinearOpMode {
             }
 
             // ----------- CODE ABOVE IS EXPERIMENTAL -------------
+
+            // moves arm back to init position
+            armPos = OmegaBot.ARM_INIT;
+            robot.arm.setTargetPosition(armPos);
+            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            sleep(500);
 
             // previously, the code above was just one line:
             // pickedUp = false;
@@ -178,11 +178,8 @@ public class LinearTeleop extends LinearOpMode {
 
                 // ----------- CODE BELOW IS EXPERIMENTAL -------------
 
-                // if the block was automatically intaken using sensorPickupProcess,
                 // set pickedUp to false (since outtake was just run)
-                if (pickedUp) {
-                    pickedUp = false;
-                }
+                pickedUp = false;
 
                 // ----------- CODE ABOVE IS EXPERIMENTAL --------------
             }
