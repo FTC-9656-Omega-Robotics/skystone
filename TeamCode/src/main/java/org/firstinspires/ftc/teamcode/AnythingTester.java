@@ -123,11 +123,7 @@ public class AnythingTester extends LinearOpMode {
 */
 
         // test capstone rotator positions
-        robot.capstoneRotator.setPosition(OmegaBot.CAPSTONE_ROTATOR_INIT);
-        sleep(1000);
 
-        robot.capstoneRotator.setPosition(OmegaBot.CAPSTONE_ROTATOR_ROTATED);
-        sleep(1000);
 
     }
 }

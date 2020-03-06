@@ -36,7 +36,8 @@ public class LinearTeleop extends LinearOpMode {
             servoProcess();
             sensorPickupProcess();
             intakeProcessIn();
-            intakeProcessOut();
+            //intakeProcessOut();
+            capstoneProcess();
             foundationGrippers();
             //flagWave();
 
@@ -79,7 +80,7 @@ public class LinearTeleop extends LinearOpMode {
         if (gamepad2.right_bumper) {
             // opens block gripper
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
-            sleep(200);
+            sleep(350);
 
             // moves arm back to init position
             armPos = OmegaBot.ARM_INIT;
@@ -136,7 +137,11 @@ public class LinearTeleop extends LinearOpMode {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
             armPos = OmegaBot.ARM_DOWN;
             grabbingBlock = true;
-        } else if (gamepad2.dpad_up) {
+        } else if (gamepad2.dpad_up && armPos == OmegaBot.ARM_UP && !robot.arm.isBusy()) {
+            // puts arm and blockGripper in up position
+            armPos = OmegaBot.ARM_UP - 300;
+            power = .6;
+        } else if (gamepad2.dpad_up && armPos != OmegaBot.ARM_UP - 300) {
             // puts arm and blockGripper in up position
             armPos = OmegaBot.ARM_UP;
             power = .6;
@@ -154,6 +159,7 @@ public class LinearTeleop extends LinearOpMode {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
 
             // move arm to traveling position
+            armPos = OmegaBot.ARM_TRAVELING;
             robot.arm.setTargetPosition(OmegaBot.ARM_TRAVELING);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setPower(power);
@@ -201,6 +207,26 @@ public class LinearTeleop extends LinearOpMode {
                 robot.leftIntake.setPower(-1);
                 robot.rightIntake.setPower(1);
             }
+        } else if (gamepad2.right_trigger > .5) {
+            // pressing both triggers stops running the intake
+            if (gamepad2.left_trigger > .5 && gamepad2.right_trigger > .5) {
+                robot.leftIntake.setPower(0);
+                robot.rightIntake.setPower(0);
+            } else {
+                // pressing just right trigger outtakes the block
+                robot.leftIntake.setPower(.3);
+                robot.rightIntake.setPower(-.3);
+
+                // ----------- CODE BELOW IS EXPERIMENTAL -------------
+
+                // if the block was automatically intaken using sensorPickupProcess,
+                // set pickedUp to false (since outtake was just run)
+                if (pickedUp) {
+                    //pickedUp = false;
+                }
+
+                // ----------- CODE ABOVE IS EXPERIMENTAL --------------
+            }
         } else {
             robot.leftIntake.setPower(0);
             robot.rightIntake.setPower(0);
@@ -218,20 +244,33 @@ public class LinearTeleop extends LinearOpMode {
             robot.arm.setTargetPosition(0);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setPower(armPower);
-            sleep(800);
+            sleep(400);
 
             // grip the block
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
-            sleep(500);
+            sleep(150);
 
             // move arm to traveling (init) position
-            robot.arm.setTargetPosition(OmegaBot.ARM_INIT);
+            armPos = OmegaBot.ARM_TRAVELING;
+            robot.arm.setTargetPosition(OmegaBot.ARM_TRAVELING);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setPower(armPower);
-            sleep(500);
+            sleep(100);
        }
     }
-
+    public void capstoneProcess() {
+        if (gamepad1.left_bumper) {
+            robot.capstoneRotator.setPosition(OmegaBot.CAPSTONE_ROTATOR_INIT);
+        }
+        if (gamepad1.right_bumper) {
+            robot.capstoneRotator.setPosition(OmegaBot.CAPSTONE_ROTATOR_ROTATED);
+        }
+        if (gamepad1.dpad_down) {
+            for(int i = 100; i > -1; i--) {
+                robot.capstoneReleaser.setPosition(i/100.0);
+            }
+        }
+    }
     public void drivetrainProcess() {
         double forward = -gamepad1.left_stick_y;
         double right = gamepad1.left_stick_x;

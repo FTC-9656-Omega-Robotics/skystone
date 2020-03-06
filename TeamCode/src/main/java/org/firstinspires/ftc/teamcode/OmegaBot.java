@@ -46,7 +46,7 @@ public class OmegaBot {
     static final int ARM_INIT = -250;
     static final int ARM_DOWN = -100;
     static final int ARM_UP = -1400;
-    static final int ARM_TRAVELING = -210;
+    static final int ARM_TRAVELING = -180;
 
     // servos
     public Servo blockRotator; // rotates block gripper on arm
@@ -96,7 +96,7 @@ public class OmegaBot {
     public static final double CAPSTONE_ROTATOR_ROTATED = 0.66; // rotated to release position
 
     public static final double CAPSTONE_RELEASER_HELD = 1;
-    public static final double CAPSTONE_RELEASER_RELEASED = 0;
+    public static final double CAPSTONE_RELEASER_RELEASED = 0.5;
 
     // sensors
     public ColorSensor sensorColor;
