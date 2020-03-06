@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.AutoBackend.CustomSkystoneDetector;
@@ -21,6 +22,7 @@ import java.util.Vector;
 
 import kotlin.Unit;
 
+@Disabled
 @Autonomous(group = "drive")
 public class Red3Stone extends LinearOpMode {
     OmegaBotRR robot;
