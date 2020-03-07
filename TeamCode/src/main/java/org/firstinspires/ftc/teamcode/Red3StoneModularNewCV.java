@@ -35,8 +35,8 @@ public class Red3StoneModularNewCV extends LinearOpMode {
     private static float rectHeight = .6f/8f;
     private static float rectWidth = 1.5f/8f;
 
-    private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
-    private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
+    private static float offsetX = -0.5f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
+    private static float offsetY = 0.5f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
     private static float[] midPos = {4f/8f+offsetX, 4f/8f+offsetY};//0 = col, 1 = row
     private static float[] leftPos = {2f/8f+offsetX, 4f/8f+offsetY};
@@ -84,7 +84,9 @@ public class Red3StoneModularNewCV extends LinearOpMode {
     final int PARKED_Y = -22;
 
     // after gripping foundation, splines to this position to move foundation into building site
-    final Pose2d FOUNDATION_END_POS = new Pose2d(40, -50, Math.toRadians(180));
+    final int FOUNDATION_END_X = 40;
+    final int FOUNDATION_END_Y = -50;
+    final Pose2d FOUNDATION_END_POS = new Pose2d(FOUNDATION_END_X, FOUNDATION_END_Y, Math.toRadians(180));
 
     // dump position coordinates
     // far = close to wall, close = close to bridge
@@ -130,14 +132,11 @@ public class Red3StoneModularNewCV extends LinearOpMode {
 
         phoneCam.openCameraDevice();//open camera
         phoneCam.setPipeline(new opencvSkystoneDetector.StageSwitchingPipeline());//different stages
-        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_RIGHT);//display on RC TODO: check if it's actually supposed to be sideways right
+        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_RIGHT);//display on RC
         //width, height
-        //width = height in this case, because camera is in portrait mode.
 
 
         // ------------ CHOOSING AN AUTO PATH --------------
-
-        // TODO: figure out CV
 
         // use CV to detect location of the skystone
         while (!isStopRequested() && !opModeIsActive()) {
@@ -240,7 +239,7 @@ public class Red3StoneModularNewCV extends LinearOpMode {
 
         // pick up first skystone
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        sleep(900);
+        sleep(700);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
 
@@ -256,11 +255,11 @@ public class Red3StoneModularNewCV extends LinearOpMode {
 
         // dump first skystone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-        sleep(500);
+        sleep(300);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
-        sleep(500);
+        sleep(300);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-        sleep(500);
+        sleep(300);
 
         // move to second skystone (closest to bridge)
         drive.followTrajectorySync(
@@ -282,9 +281,9 @@ public class Red3StoneModularNewCV extends LinearOpMode {
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        sleep(900);
+        sleep(700);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-        sleep(500);
+        sleep(300);
 
         // move to foundation to dump
         drive.followTrajectorySync(
@@ -300,14 +299,13 @@ public class Red3StoneModularNewCV extends LinearOpMode {
 
         // dump second skystone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-        sleep(500);
+        sleep(300);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
-        sleep(500);
+        sleep(300);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-        sleep(500);
+        sleep(300);
 
         /*
-
         // move to third stone (a regular one)
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
@@ -316,13 +314,11 @@ public class Red3StoneModularNewCV extends LinearOpMode {
                         .addMarker( () -> { // move side back elbow and gripper down a bit early for efficiency
                             robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_READY);
                             robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_READY);
-
                             return Unit.INSTANCE;
                         })
                         .strafeTo(new Vector2d(stoneX, stoneY)) // strafe to nearest regular stone
                 .build()
         );
-
         // pick up third stone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
@@ -330,7 +326,6 @@ public class Red3StoneModularNewCV extends LinearOpMode {
         sleep(900);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
-
         // move to foundation to dump
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
@@ -340,7 +335,6 @@ public class Red3StoneModularNewCV extends LinearOpMode {
                         .strafeTo(new Vector2d(DUMP_CLOSE_X, DUMP_CLOSE_Y + 6)) // strafe closer to foundation (to left)
                 .build()
         );
-
         // dump third stone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
@@ -348,7 +342,6 @@ public class Red3StoneModularNewCV extends LinearOpMode {
         sleep(500);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
-
          */
 
 
@@ -379,12 +372,22 @@ public class Red3StoneModularNewCV extends LinearOpMode {
 
         // ungrip foundation
         robot.foundationGripper.setPosition(OmegaBotRR.FOUNDATION_GRIPPER_UP);
-        sleep(900);
+        sleep(300);
+
+        // drive backwards into foundation for insurance and strafe closer to bridge before parking
+        // to avoid hitting alliance partner
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .reverse() // reverse direction to move backwards
+                        .lineTo(new Vector2d(FOUNDATION_END_X + 5, FOUNDATION_END_Y)) // drive backwards
+                        .strafeTo(new Vector2d(FOUNDATION_END_X + 5, PARKED_Y)) // strafe closer to bridge
+                        .build()
+        );
 
         // park under red bridge
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(PARKED_X, PARKED_Y)) // strafe to parking position
+                        .strafeTo(new Vector2d(PARKED_X, PARKED_Y))// strafe to parking position
                         .build()
         );
     }

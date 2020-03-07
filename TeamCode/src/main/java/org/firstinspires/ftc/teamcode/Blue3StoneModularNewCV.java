@@ -1,39 +1,66 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.AutoBackend.CustomSkystoneDetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-import org.firstinspires.ftc.teamcode.OmegaBotRR;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 
-import java.util.Vector;
-
 import kotlin.Unit;
 
-@Autonomous (name = "Blue 3 Stone Modular")
-public class Blue3StoneModular extends LinearOpMode {
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.openftc.easyopencv.OpenCvPipeline;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Autonomous (name = "Blue 3 Stone Modular New CV")
+public class Blue3StoneModularNewCV extends LinearOpMode {
     // ----------------- HARDWARE --------------------------------
     OmegaBotRR robot;
     SampleMecanumDriveBase drive;
 
 
     // ----------------- COMPUTER VISION -------------------------
-    private OpenCvCamera phoneCam;
-    private CustomSkystoneDetector skyStoneDetector;
+    private ElapsedTime runtime = new ElapsedTime();
 
-    // position of skystone closest to the bridge (none, 1, 2, or 3)
-    String skystonePosition = "none";
-    double xPosition;
-    double yPosition;
+    //0 means skystone, 1 means yellow stone
+    //-1 for debug, but we can keep it like this because if it works, it should change to either 0 or 255
+    private static int valMid = -1;
+    private static int valLeft = -1;
+    private static int valRight = -1;
+
+    private static float rectHeight = .6f/8f;
+    private static float rectWidth = 1.5f/8f;
+
+    private static float offsetX = -0.5f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
+    private static float offsetY = 0.5f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
+
+    private static float[] midPos = {4f/8f+offsetX, 4f/8f+offsetY};//0 = col, 1 = row
+    private static float[] leftPos = {2f/8f+offsetX, 4f/8f+offsetY};
+    private static float[] rightPos = {6f/8f+offsetX, 4f/8f+offsetY};
+    //moves all rectangles right or left by amount. units are in ratio to monitor
+
+    private final int rows = 640;
+    private final int cols = 480;
+
+    OpenCvCamera phoneCam;
 
 
     // ----------------- CONSTANT POSITIONS ----------------------
@@ -108,89 +135,79 @@ public class Blue3StoneModular extends LinearOpMode {
         robot = new OmegaBotRR(telemetry, hardwareMap);
         drive = new SampleMecanumDriveREV(hardwareMap);
 
-        //initializes camera detection stuff
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        // ----------------- COMPUTER VISION --------------------
 
-        //gets the camera ready and views the skystones
-        phoneCam.openCameraDevice();
-        skyStoneDetector = new CustomSkystoneDetector();
-        skyStoneDetector.useDefaults();
-        phoneCam.setPipeline(skyStoneDetector);
-        phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        //P.S. if you're using the latest version of easyopencv, you might need to change the next line to the following:
+        //phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);//remove this
+
+        phoneCam.openCameraDevice();//open camera
+        phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
+        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_RIGHT);//display on RC
+        //width, height
 
 
         // ------------ CHOOSING AN AUTO PATH --------------
 
-        // TODO: figure out xPos ranges for CV
-
         // use CV to detect location of the skystone
         while (!isStopRequested() && !opModeIsActive()) {
-            xPosition = skyStoneDetector.foundRectangle().x;
-            yPosition = skyStoneDetector.foundRectangle().y;
 
-            boolean skystoneAtPos1 = xPosition >= 180 || xPosition < 40;
-            boolean skystoneAtPos2 = xPosition > 130;
+            // display position values
+            telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
+            telemetry.addData("Height", rows);
+            telemetry.addData("Width", cols);
+
+            telemetry.update();
+            sleep(100);
+
+
+            boolean skystoneAtPos1 = valLeft == 0;
+            boolean skystoneAtPos2 = valMid == 0;
 
             if (skystoneAtPos1) {
-                skystonePosition = "1";
+                skystoneWallX = SKYSTONE_4_X;
+                skystoneWallY = SKYSTONE_4_Y;
 
-                // skystoneWallX = SKYSTONE_4_X;
-                // skystoneWallY = SKYSTONE_4_Y;
-
-                // skystoneBridgeX = SKYSTONE_1_X;
-                // skystoneBridgeX = SKYSTONE_1_X;
+                skystoneBridgeX = SKYSTONE_1_X;
+                skystoneBridgeX = SKYSTONE_1_X;
 
                 // nearest regular stone is at pos 2
                 // stoneX = [?];
                 // stoneY = [?];
             } else if (skystoneAtPos2) {
-                skystonePosition = "2";
+                skystoneWallX = SKYSTONE_5_X;
+                skystoneWallY = SKYSTONE_5_Y;
 
-                // skystoneWallX = SKYSTONE_5_X;
-                // skystoneWallY = SKYSTONE_5_Y;
-
-                // skystoneBridgeX = SKYSTONE_2_X;
-                // skystoneBridgeX = SKYSTONE_2_X;
+                skystoneBridgeX = SKYSTONE_2_X;
+                skystoneBridgeX = SKYSTONE_2_X;
 
                 // nearest regular stone is at pos 1
                 // stoneX = [?];
                 // stoneY = [?];
             } else {
-                skystonePosition = "3";
+                skystoneWallX = SKYSTONE_6_X;
+                skystoneWallY = SKYSTONE_6_Y;
 
-                // skystoneWallX = SKYSTONE_6_X;
-                // skystoneWallY = SKYSTONE_6_Y;
-
-                // skystoneBridgeX = SKYSTONE_3_X;
-                // skystoneBridgeX = SKYSTONE_3_X;
+                skystoneBridgeX = SKYSTONE_3_X;
+                skystoneBridgeX = SKYSTONE_3_X;
 
                 // nearest regular stone is at pos 1
                 // stoneX = [?];
                 // stoneY = [?];
             }
-
-            telemetry.addData("xPos", xPosition);
-            telemetry.addData("yPos", yPosition);
-            telemetry.addData("SkyStone Pos", skystonePosition);
-            telemetry.update();
         }
+
+        // 3-stone is still in development
+        stoneX = 0; // null
+        stoneY = 0; // null
 
         waitForStart();
 
         if (isStopRequested()) return;
 
         // --------- EXECUTE CHOSEN AUTO PATH ----------
-
-        // for testing only
-        skystoneBridgeX = SKYSTONE_3_X;
-        skystoneBridgeY = SKYSTONE_3_Y;
-
-        skystoneWallX = SKYSTONE_6_X;
-        skystoneWallY = SKYSTONE_6_Y;
-
-        stoneX = 0; // null
-        stoneY = 0; // null
 
         executeAutoPath(skystoneBridgeX, skystoneBridgeY, skystoneWallX, skystoneWallY, stoneX, stoneY);
     }
@@ -395,5 +412,142 @@ public class Blue3StoneModular extends LinearOpMode {
                         .strafeTo(new Vector2d(PARKED_X, PARKED_Y)) // strafe to parking position
                         .build()
         );
+    }
+
+    //detection pipeline
+    static class StageSwitchingPipeline extends OpenCvPipeline
+    {
+        Mat yCbCrChan2Mat = new Mat();
+        Mat thresholdMat = new Mat();
+        Mat all = new Mat();
+        List<MatOfPoint> contoursList = new ArrayList<>();
+
+        enum Stage
+        {//color difference. greyscale
+            detection,//includes outlines
+            THRESHOLD,//b&w
+            RAW_IMAGE,//displays raw view
+        }
+
+        private Stage stageToRenderToViewport = Stage.detection;
+        private Stage[] stages = Stage.values();
+
+        @Override
+        public void onViewportTapped()
+        {
+            /*
+             * Note that this method is invoked from the UI thread
+             * so whatever we do here, we must do quickly.
+             */
+
+            int currentStageNum = stageToRenderToViewport.ordinal();
+
+            int nextStageNum = currentStageNum + 1;
+
+            if(nextStageNum >= stages.length)
+            {
+                nextStageNum = 0;
+            }
+
+            stageToRenderToViewport = stages[nextStageNum];
+        }
+
+        @Override
+        public Mat processFrame(Mat input)
+        {
+            contoursList.clear();
+            /*
+             * This pipeline finds the contours of yellow blobs such as the Gold Mineral
+             * from the Rover Ruckus game.
+             */
+
+            //color diff cb.
+            //lower cb = more blue = skystone = white
+            //higher cb = less blue = yellow stone = grey
+            Imgproc.cvtColor(input, yCbCrChan2Mat, Imgproc.COLOR_RGB2YCrCb);//converts rgb to ycrcb
+            Core.extractChannel(yCbCrChan2Mat, yCbCrChan2Mat, 2);//takes cb difference and stores
+
+            //b&w
+            Imgproc.threshold(yCbCrChan2Mat, thresholdMat, 102, 255, Imgproc.THRESH_BINARY_INV);
+
+            //outline/contour
+            Imgproc.findContours(thresholdMat, contoursList, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+            yCbCrChan2Mat.copyTo(all);//copies mat object
+            //Imgproc.drawContours(all, contoursList, -1, new Scalar(255, 0, 0), 3, 8);//draws blue contours
+
+
+            //get values from frame
+            double[] pixMid = thresholdMat.get((int)(input.rows()* midPos[1]), (int)(input.cols()* midPos[0]));//gets value at circle
+            valMid = (int)pixMid[0];
+
+            double[] pixLeft = thresholdMat.get((int)(input.rows()* leftPos[1]), (int)(input.cols()* leftPos[0]));//gets value at circle
+            valLeft = (int)pixLeft[0];
+
+            double[] pixRight = thresholdMat.get((int)(input.rows()* rightPos[1]), (int)(input.cols()* rightPos[0]));//gets value at circle
+            valRight = (int)pixRight[0];
+
+            //create three points
+            Point pointMid = new Point((int)(input.cols()* midPos[0]), (int)(input.rows()* midPos[1]));
+            Point pointLeft = new Point((int)(input.cols()* leftPos[0]), (int)(input.rows()* leftPos[1]));
+            Point pointRight = new Point((int)(input.cols()* rightPos[0]), (int)(input.rows()* rightPos[1]));
+
+            //draw circles on those points
+            Imgproc.circle(all, pointMid,5, new Scalar( 255, 0, 0 ),1 );//draws circle
+            Imgproc.circle(all, pointLeft,5, new Scalar( 255, 0, 0 ),1 );//draws circle
+            Imgproc.circle(all, pointRight,5, new Scalar( 255, 0, 0 ),1 );//draws circle
+
+            //draw 3 rectangles
+            Imgproc.rectangle(//1-3
+                    all,
+                    new Point(
+                            input.cols()*(leftPos[0]-rectWidth/2),
+                            input.rows()*(leftPos[1]-rectHeight/2)),
+                    new Point(
+                            input.cols()*(leftPos[0]+rectWidth/2),
+                            input.rows()*(leftPos[1]+rectHeight/2)),
+                    new Scalar(0, 255, 0), 3);
+            Imgproc.rectangle(//3-5
+                    all,
+                    new Point(
+                            input.cols()*(midPos[0]-rectWidth/2),
+                            input.rows()*(midPos[1]-rectHeight/2)),
+                    new Point(
+                            input.cols()*(midPos[0]+rectWidth/2),
+                            input.rows()*(midPos[1]+rectHeight/2)),
+                    new Scalar(0, 255, 0), 3);
+            Imgproc.rectangle(//5-7
+                    all,
+                    new Point(
+                            input.cols()*(rightPos[0]-rectWidth/2),
+                            input.rows()*(rightPos[1]-rectHeight/2)),
+                    new Point(
+                            input.cols()*(rightPos[0]+rectWidth/2),
+                            input.rows()*(rightPos[1]+rectHeight/2)),
+                    new Scalar(0, 255, 0), 3);
+
+            switch (stageToRenderToViewport)
+            {
+                case THRESHOLD:
+                {
+                    return thresholdMat;
+                }
+
+                case detection:
+                {
+                    return all;
+                }
+
+                case RAW_IMAGE:
+                {
+                    return input;
+                }
+
+                default:
+                {
+                    return input;
+                }
+            }
+        }
+
     }
 }

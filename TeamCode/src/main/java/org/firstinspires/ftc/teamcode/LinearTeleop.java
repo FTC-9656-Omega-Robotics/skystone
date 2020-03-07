@@ -17,7 +17,7 @@ public class LinearTeleop extends LinearOpMode {
     private ElapsedTime runtime;
     double maxSpeed = 1;
     boolean intakeOn = true;
-    int armPos = OmegaBot.ARM_INIT;
+    int armPos = OmegaBot.ARM_TRAVELING;
     int count = 0;
     boolean pickedUp = false;
     boolean armMovedBack = false;
@@ -235,6 +235,10 @@ public class LinearTeleop extends LinearOpMode {
         if (isBlockIntaked && !pickedUp) {
             pickedUp = true;
 
+            // open block gripper just in case
+            robot.blockGripper.setPosition(OmegaBotRR.BLOCK_GRIPPER_OPEN);
+            sleep(150);
+
             // move arm down to intake block
             robot.arm.setTargetPosition(0);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -272,9 +276,9 @@ public class LinearTeleop extends LinearOpMode {
         double clockwise = gamepad1.right_stick_x * .75;
 
         // cubic drive - instead of proportional power to motors, cube input from joysticks
-        forward = Math.pow(forward, 3);
-        right = Math.pow(right, 3);
-        clockwise = Math.pow(clockwise, 3);
+//        forward = Math.pow(forward, 3);
+//        right = Math.pow(right, 3);
+//        clockwise = Math.pow(clockwise, 3);
 
         //double temp = forward * Math.cos(Math.toRadians(robot.getAngle())) - right * Math.sin(Math.toRadians(robot.getAngle()));
         //right = forward * Math.sin(Math.toRadians(robot.getAngle())) + right * Math.cos(Math.toRadians(robot.getAngle()));
