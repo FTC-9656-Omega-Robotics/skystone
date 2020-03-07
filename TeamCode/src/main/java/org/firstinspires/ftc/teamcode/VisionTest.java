@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import android.media.Image;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TfodSkyStone;
 import java.util.List;
 
 @Autonomous(name = "VisionTest")
+@Disabled
 public class VisionTest extends LinearOpMode {
     private VuforiaSkyStone vuforiaSkyStone;
     private TfodSkyStone tfodSkyStone;
