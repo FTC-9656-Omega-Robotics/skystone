@@ -69,7 +69,9 @@ public class Red3StoneModular extends LinearOpMode {
     final int PARKED_Y = -22;
 
     // after gripping foundation, splines to this position to move foundation into building site
-    final Pose2d FOUNDATION_END_POS = new Pose2d(40, -50, Math.toRadians(180));
+    final int FOUNDATION_END_X = 40;
+    final int FOUNDATION_END_Y = -50;
+    final Pose2d FOUNDATION_END_POS = new Pose2d(FOUNDATION_END_X, FOUNDATION_END_Y, Math.toRadians(180));
 
     // dump position coordinates
     // far = close to wall, close = close to bridge
@@ -229,7 +231,7 @@ public class Red3StoneModular extends LinearOpMode {
 
         // pick up first skystone
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        sleep(900);
+        sleep(700);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
         sleep(500);
 
@@ -245,11 +247,11 @@ public class Red3StoneModular extends LinearOpMode {
 
         // dump first skystone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-        sleep(500);
+        sleep(300);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
-        sleep(500);
+        sleep(300);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-        sleep(500);
+        sleep(300);
 
         // move to second skystone (closest to bridge)
         drive.followTrajectorySync(
@@ -271,9 +273,9 @@ public class Red3StoneModular extends LinearOpMode {
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         sleep(500);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
-        sleep(900);
+        sleep(700);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-        sleep(500);
+        sleep(300);
 
         // move to foundation to dump
         drive.followTrajectorySync(
@@ -289,11 +291,11 @@ public class Red3StoneModular extends LinearOpMode {
 
         // dump second skystone
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
-        sleep(500);
+        sleep(300);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_STOWED);
-        sleep(500);
+        sleep(300);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
-        sleep(500);
+        sleep(300);
 
         /*
         // move to third stone (a regular one)
@@ -362,12 +364,21 @@ public class Red3StoneModular extends LinearOpMode {
 
         // ungrip foundation
         robot.foundationGripper.setPosition(OmegaBotRR.FOUNDATION_GRIPPER_UP);
-        sleep(900);
+        sleep(300);
+
+        // drive backwards into foundation for insurance and strafe closer to bridge before parking
+        // to avoid hitting alliance partner
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .reverse() // reverse direction to move backwards
+                        .lineTo(new Vector2d(FOUNDATION_END_X + 3, FOUNDATION_END_Y)) // drive backwards
+                        .strafeTo(new Vector2d(FOUNDATION_END_X + 3, PARKED_Y)) // strafe closer to bridge
+                .build()
+        );
 
         // park under red bridge
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(PARKED_X, PARKED_Y))
                         .strafeTo(new Vector2d(PARKED_X, PARKED_Y))// strafe to parking position
                         .build()
         );
