@@ -3,25 +3,36 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.OmegaBot;
-import org.firstinspires.ftc.teamcode.MotionMethods;
+import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
+import org.firstinspires.ftc.teamcode.OmegaBotRR;
 
 @Autonomous(group = "drive")
 
-// pre-condition: robot is as close to skybridge as possible
 public class JustPark extends LinearOpMode {
-    OmegaBot robot;
-    MotionMethods motionMethods;
+    OmegaBotRR robot;
+    SampleMecanumDriveREV drive;
+
+    // pre-condition: robot is as close to bridge as possible AND facing the bridge
+    final double DISTANCE = 10; // inches
+    final long SLEEP_TIME = 28000; // 28 sec so that we park at end of auto
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // edit as needed (units: inches)
-        double distance = 3;
-
         // initialize robot and drivetrain
-        robot = new OmegaBot(telemetry, hardwareMap);
+        robot = new OmegaBotRR(telemetry, hardwareMap);
+        drive = new SampleMecanumDriveREV(hardwareMap);
 
-        // move forward 3 inches
-        motionMethods.moveMotionProfile(distance, 1);
+        waitForStart();
+
+        if (isStopRequested()) return;
+
+        sleep(SLEEP_TIME);
+
+        // move forward a certain distance to park under bridge
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .forward(DISTANCE)
+                        .build()
+        );
     }
 }
