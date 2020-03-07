@@ -35,11 +35,9 @@ public class LinearTeleop extends LinearOpMode {
             armProcess();
             servoProcess();
             sensorPickupProcess();
-            intakeProcessIn();
-            //intakeProcessOut();
+            intakeProcess();
             capstoneProcess();
             foundationGrippers();
-            //flagWave();
 
             telemetry.addData("armPos",robot.arm.getCurrentPosition());
             telemetry.update();
@@ -58,18 +56,6 @@ public class LinearTeleop extends LinearOpMode {
         }
     }
 
-    public void flagWave() {
-        if (count < 50) {
-            robot.sideBackElbow.setPosition(0.3);
-            count++;
-        } else if (count < 100) {
-            robot.sideBackElbow.setPosition(0.35);
-            count++;
-        } else {
-            count = 0;
-        }
-    }
-
     public void servoProcess() {
         if (gamepad2.x) {
             robot.blockRotator.setPosition(OmegaBot.BLOCK_ROTATOR_STRAIGHT);
@@ -82,25 +68,19 @@ public class LinearTeleop extends LinearOpMode {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
             sleep(350);
 
-            // ----------- CODE BELOW IS EXPERIMENTAL -------------
-
             // only resets pickedUp if the block was outtaken by the arm
             // so that the drivers can outtake with compliant wheel intake
             if (armMovedBack) {
+                // moves arm back to init position
+                armPos = OmegaBot.ARM_INIT;
+                robot.arm.setTargetPosition(armPos);
+                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                sleep(500);
+
                 pickedUp = false;
                 armMovedBack = false;
             }
 
-            // ----------- CODE ABOVE IS EXPERIMENTAL -------------
-
-            // moves arm back to init position
-            armPos = OmegaBot.ARM_INIT;
-            robot.arm.setTargetPosition(armPos);
-            robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            sleep(500);
-
-            // previously, the code above was just one line:
-            // pickedUp = false;
         } else if (gamepad2.left_bumper) {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
         }
@@ -162,7 +142,7 @@ public class LinearTeleop extends LinearOpMode {
 
             // move arm to traveling position
             armPos = OmegaBot.ARM_TRAVELING;
-            robot.arm.setTargetPosition(OmegaBot.ARM_TRAVELING);
+            robot.arm.setTargetPosition(armPos);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setPower(power);
         }
@@ -171,31 +151,7 @@ public class LinearTeleop extends LinearOpMode {
         armMovedBack = armPos <= OmegaBot.ARM_UP;
     }
 
-    public void intakeProcessOut() {
-        if (gamepad2.right_trigger > .5) {
-            // pressing both triggers stops running the intake
-            if (gamepad2.left_trigger > .5 && gamepad2.right_trigger > .5) {
-                robot.leftIntake.setPower(0);
-                robot.rightIntake.setPower(0);
-            } else {
-                // pressing just right trigger outtakes the block
-                robot.leftIntake.setPower(.3);
-                robot.rightIntake.setPower(-.3);
-
-                // ----------- CODE BELOW IS EXPERIMENTAL -------------
-
-                // set pickedUp to false (since outtake was just run)
-                pickedUp = false;
-
-                // ----------- CODE ABOVE IS EXPERIMENTAL --------------
-            }
-        } else {
-            robot.leftIntake.setPower(0);
-            robot.rightIntake.setPower(0);
-        }
-    }
-
-    public void intakeProcessIn() {
+    public void intakeProcess() {
         if (gamepad2.left_trigger > .5) {
             // pressing both triggers stops running the intake
             if (gamepad2.left_trigger > .5 && gamepad2.right_trigger > .5) {
@@ -205,6 +161,33 @@ public class LinearTeleop extends LinearOpMode {
                 // pressing just left trigger intakes a block
                 robot.leftIntake.setPower(-1);
                 robot.rightIntake.setPower(1);
+
+                // if the block was automatically intaken using sensorPickupProcess,
+                // set pickedUp to false (since outtake was just run)
+                pickedUp = false;
+
+                // while intaking, have arm at high enough position to intake
+                while (gamepad2.left_trigger > .5) {
+                    // move arm up enough to outtake block using compliant wheel intake
+                    armPos = OmegaBot.ARM_INIT - 100;
+                    robot.arm.setTargetPosition(armPos);
+                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    // be able to drive while intaking
+                    drivetrainProcess();
+
+                    // run sensorPickupProcess() if a block is close enough (has been intaken)
+                    boolean isBlockIntaked = robot.sensorDistance.getDistance(DistanceUnit.CM) < 7;
+                    if (isBlockIntaked) {
+                        sensorPickupProcess();
+                    }
+                }
+
+                // move arm back down
+                armPos = OmegaBot.ARM_TRAVELING;
+                robot.arm.setTargetPosition(armPos);
+                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
             }
         } else if (gamepad2.right_trigger > .5) {
             // pressing both triggers stops running the intake
@@ -213,18 +196,31 @@ public class LinearTeleop extends LinearOpMode {
                 robot.rightIntake.setPower(0);
             } else {
                 // pressing just right trigger outtakes the block
+
+                // open block gripper
+                robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
+
+                // run outtakes
                 robot.leftIntake.setPower(.3);
                 robot.rightIntake.setPower(-.3);
 
-                // ----------- CODE BELOW IS EXPERIMENTAL -------------
+                sleep(500);
 
-                // if the block was automatically intaken using sensorPickupProcess,
-                // set pickedUp to false (since outtake was just run)
-                if (pickedUp) {
-                    //pickedUp = false;
+                // while outtaking, have arm at high enough position to outtake
+                while (gamepad2.right_trigger > .5) {
+                    // move arm up enough to outtake block using compliant wheel intake
+                    armPos = OmegaBot.ARM_INIT - 100;
+                    robot.arm.setTargetPosition(armPos);
+                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    // be able to drive while outtaking
+                    drivetrainProcess();
                 }
 
-                // ----------- CODE ABOVE IS EXPERIMENTAL --------------
+                // move arm back down
+                armPos = OmegaBot.ARM_TRAVELING;
+                robot.arm.setTargetPosition(armPos);
+                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
         } else {
             robot.leftIntake.setPower(0);
@@ -254,7 +250,6 @@ public class LinearTeleop extends LinearOpMode {
             robot.arm.setTargetPosition(OmegaBot.ARM_TRAVELING);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setPower(armPower);
-            sleep(100);
        }
     }
     public void capstoneProcess() {

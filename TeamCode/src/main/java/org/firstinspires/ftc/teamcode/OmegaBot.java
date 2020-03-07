@@ -96,7 +96,6 @@ public class OmegaBot {
     public static final double CAPSTONE_ROTATOR_ROTATED = 0.66; // rotated to release position
 
     public static final double CAPSTONE_RELEASER_HELD = 1;
-    public static final double CAPSTONE_RELEASER_RELEASED = 0.5;
 
     // sensors
     public ColorSensor sensorColor;
