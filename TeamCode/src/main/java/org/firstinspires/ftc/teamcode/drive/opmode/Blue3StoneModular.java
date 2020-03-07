@@ -57,10 +57,10 @@ public class Blue3StoneModular extends LinearOpMode {
     final int SKYSTONE_6_X = -60;
 
     final int SKYSTONE_1_Y = 34;
-    final int SKYSTONE_2_Y = 38;
-    final int SKYSTONE_3_Y = 38;
+    final int SKYSTONE_2_Y = 33;
+    final int SKYSTONE_3_Y = 33;
     final int SKYSTONE_4_Y = 38;
-    final int SKYSTONE_5_Y = 38;
+    final int SKYSTONE_5_Y = 36;
     final int SKYSTONE_6_Y = 38;
 
     // a bit of space between robot and neutral bridge
@@ -68,11 +68,13 @@ public class Blue3StoneModular extends LinearOpMode {
     final int UNDER_BLUE_BRIDGE_Y = 40;
 
     // parked position coordinates
-    final int PARKED_X = 4;
+    final int PARKED_X = 0;
     final int PARKED_Y = 35;
 
     // after gripping foundation, splines to this position to move foundation into building site
-    final Pose2d FOUNDATION_END_POS = new Pose2d(30, 50, Math.toRadians(180));
+    final int FOUNDATION_END_X = 30;
+    final int FOUNDATION_END_Y = 50;
+    final Pose2d FOUNDATION_END_POS = new Pose2d(FOUNDATION_END_X, FOUNDATION_END_Y, Math.toRadians(180));
 
     // dump position coordinates
     // far = close to wall, close = close to bridge
@@ -80,9 +82,9 @@ public class Blue3StoneModular extends LinearOpMode {
     final int DUMP_MID_X = 53;
     final int DUMP_CLOSE_X = 48;
 
-    final int DUMP_FAR_Y = 37;
-    final int DUMP_MID_Y = 35;
-    final int DUMP_CLOSE_Y = 35;
+    final int DUMP_FAR_Y = 33;
+    final int DUMP_MID_Y = 31;
+    final int DUMP_CLOSE_Y = 33;
 
     // ----------------- DYNAMIC POSITIONS --------------------------
 
@@ -182,11 +184,11 @@ public class Blue3StoneModular extends LinearOpMode {
         // --------- EXECUTE CHOSEN AUTO PATH ----------
 
         // for testing only
-        skystoneBridgeX = SKYSTONE_2_X;
-        skystoneBridgeY = SKYSTONE_2_Y;
+        skystoneBridgeX = SKYSTONE_3_X;
+        skystoneBridgeY = SKYSTONE_3_Y;
 
-        skystoneWallX = SKYSTONE_5_X;
-        skystoneWallY = SKYSTONE_5_Y;
+        skystoneWallX = SKYSTONE_6_X;
+        skystoneWallY = SKYSTONE_6_Y;
 
         stoneX = 0; // null
         stoneY = 0; // null
@@ -214,7 +216,7 @@ public class Blue3StoneModular extends LinearOpMode {
      */
     public void executeAutoPath(int skystoneBridgeX, int skystoneBridgeY, int skystoneWallX, int skystoneWallY, int stoneX, int stoneY) {
         // heading of robot (in deg) when it first moves under the blue bridge
-        final int BRIDGE_ANGLE = 170;
+        final int BRIDGE_ANGLE = 175;
 
         // before moving, get side front elbow and gripper ready
         robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_READY);
@@ -232,11 +234,11 @@ public class Blue3StoneModular extends LinearOpMode {
 
         // pick up first skystone
         robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
-        sleep(300);
-        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
-        sleep(900);
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
         sleep(500);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
+        sleep(700);
+        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
+        sleep(300);
 
         // move to foundation to dump
         drive.followTrajectorySync(
@@ -252,25 +254,26 @@ public class Blue3StoneModular extends LinearOpMode {
 
         // dump first skystone
         robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
-        sleep(500);
+        sleep(300);
         robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_READY);
-        sleep(500);
+        sleep(300);
         robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
-        sleep(500);
-        robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED);
+        sleep(300);
+        robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED);
+        sleep(300);
 
         // move to second skystone (closest to bridge)
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .splineTo(new Pose2d(UNDER_BLUE_BRIDGE_X, UNDER_BLUE_BRIDGE_Y, Math.toRadians(180))) // spline to under blue bridge
                         .addMarker( () -> {
-                            // move side front elbow gripper down a bit early for efficiency
+                            // set side front elbow and gripper to ready position for efficiency
                             robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_READY);
                             robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_READY);
 
                             return Unit.INSTANCE;
                         })
-                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY-3)) // strafe to second skystone
+                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY)) // strafe to second skystone
                         .build()
         );
 
@@ -278,9 +281,9 @@ public class Blue3StoneModular extends LinearOpMode {
         robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
         sleep(500);
         robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_CLOSED);
-        sleep(900);
+        sleep(700);
         robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
-        sleep(500);
+        sleep(300);
 
         // move to foundation to dump
         drive.followTrajectorySync(
@@ -288,7 +291,7 @@ public class Blue3StoneModular extends LinearOpMode {
                         .reverse() // reverse direction to go back to foundation
                         // move away from stones a bit so that the gripped stone doesn't hit the other ones when robot moves
                         .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY + 3))
-                        .strafeTo(new Vector2d(UNDER_BLUE_BRIDGE_X, UNDER_BLUE_BRIDGE_Y)) // strafe to under blue bridge
+                        .strafeTo(new Vector2d(UNDER_BLUE_BRIDGE_X, UNDER_BLUE_BRIDGE_Y - 4)) // strafe to under blue bridge (Y coordinate edited for alliance partner safety)
                         .splineTo(new Pose2d(DUMP_MID_X, DUMP_MID_Y, Math.toRadians(180))) // spline to middle dumping position
                         .strafeTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y - 6)) // strafe closer to foundation
                         .build()
@@ -297,11 +300,11 @@ public class Blue3StoneModular extends LinearOpMode {
 
         // dump second skystone
         robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_DOWN);
-        sleep(500);
+        sleep(300);
         robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_READY);
-        sleep(500);
+        sleep(300);
         robot.sideFrontElbow.setPosition(OmegaBotRR.SIDE_FRONT_ELBOW_UP);
-        sleep(500);
+        sleep(300);
         robot.sideFrontGripper.setPosition(OmegaBotRR.SIDE_FRONT_GRIPPER_STOWED);
 
         /*
@@ -367,20 +370,25 @@ public class Blue3StoneModular extends LinearOpMode {
         // grip foundation
         robot.foundationGripper.setPosition(OmegaBotRR.FOUNDATION_GRIPPER_DOWN);
 
-        // drive a bit closer to building site and turn another 90 deg right
-        // to move foundation into building site
+        // pull foundation into building site
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .splineTo(FOUNDATION_END_POS) // spline to ending position after pulling foundation
-                        .reverse()
-                        .lineTo(new Vector2d(35,50))
-                        .reverse()
                         .build()
         );
 
         // ungrip foundation
         robot.foundationGripper.setPosition(OmegaBotRR.FOUNDATION_GRIPPER_UP);
-        sleep(900);
+
+        // drive backwards into foundation for insurance and strafe closer to bridge before parking
+        // to avoid hitting alliance partner
+        drive.followTrajectorySync(
+                drive.trajectoryBuilder()
+                        .reverse() // reverse direction to move backwards
+                        .lineTo(new Vector2d(FOUNDATION_END_X + 5, FOUNDATION_END_Y)) // drive backwards
+                        .strafeTo(new Vector2d(FOUNDATION_END_X + 5, PARKED_Y)) // strafe closer to bridge
+                        .build()
+        );
 
         // park under blue bridge
         drive.followTrajectorySync(

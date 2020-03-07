@@ -371,8 +371,8 @@ public class Red3StoneModular extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .reverse() // reverse direction to move backwards
-                        .lineTo(new Vector2d(FOUNDATION_END_X + 3, FOUNDATION_END_Y)) // drive backwards
-                        .strafeTo(new Vector2d(FOUNDATION_END_X + 3, PARKED_Y)) // strafe closer to bridge
+                        .lineTo(new Vector2d(FOUNDATION_END_X + 5, FOUNDATION_END_Y)) // drive backwards
+                        .strafeTo(new Vector2d(FOUNDATION_END_X + 5, PARKED_Y)) // strafe closer to bridge
                 .build()
         );
 

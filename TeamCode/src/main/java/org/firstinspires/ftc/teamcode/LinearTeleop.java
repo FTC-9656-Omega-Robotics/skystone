@@ -262,6 +262,7 @@ public class LinearTeleop extends LinearOpMode {
         if (gamepad1.dpad_down) {
             for(int i = 100; i > -1; i--) {
                 robot.capstoneReleaser.setPosition(i/100.0);
+                drivetrainProcess();
             }
         }
     }
