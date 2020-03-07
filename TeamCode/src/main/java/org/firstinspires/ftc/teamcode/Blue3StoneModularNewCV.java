@@ -168,7 +168,7 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
                 skystoneWallY = SKYSTONE_4_Y;
 
                 skystoneBridgeX = SKYSTONE_1_X;
-                skystoneBridgeX = SKYSTONE_1_X;
+                skystoneBridgeY = SKYSTONE_1_Y;
 
                 // nearest regular stone is at pos 2
                 // stoneX = [?];
@@ -178,7 +178,7 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
                 skystoneWallY = SKYSTONE_5_Y;
 
                 skystoneBridgeX = SKYSTONE_2_X;
-                skystoneBridgeX = SKYSTONE_2_X;
+                skystoneBridgeY = SKYSTONE_2_Y;
 
                 // nearest regular stone is at pos 1
                 // stoneX = [?];
@@ -188,7 +188,7 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
                 skystoneWallY = SKYSTONE_6_Y;
 
                 skystoneBridgeX = SKYSTONE_3_X;
-                skystoneBridgeX = SKYSTONE_3_X;
+                skystoneBridgeY = SKYSTONE_3_Y;
 
                 // nearest regular stone is at pos 1
                 // stoneX = [?];
