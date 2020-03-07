@@ -46,8 +46,8 @@ public class Red3StoneModularNewCV extends LinearOpMode {
     private static float rectHeight = .6f/8f;
     private static float rectWidth = 1.5f/8f;
 
-    private static float offsetX = -0.5f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
-    private static float offsetY = 0.5f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
+    private static float offsetX = 0.5f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
+    private static float offsetY = 0.7f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
     private static float[] midPos = {4f/8f+offsetX, 4f/8f+offsetY};//0 = col, 1 = row
     private static float[] leftPos = {2f/8f+offsetX, 4f/8f+offsetY};
@@ -79,9 +79,9 @@ public class Red3StoneModularNewCV extends LinearOpMode {
     final int SKYSTONE_5_X = -46;
     final int SKYSTONE_6_X = -54;
 
-    final int SKYSTONE_1_Y = -26;
-    final int SKYSTONE_2_Y = -25;
-    final int SKYSTONE_3_Y = -25;
+    final int SKYSTONE_1_Y = -24;
+    final int SKYSTONE_2_Y = -24;
+    final int SKYSTONE_3_Y = -24;
     final int SKYSTONE_4_Y = -28;
     final int SKYSTONE_5_Y = -28;
     final int SKYSTONE_6_Y = -28;
@@ -91,7 +91,7 @@ public class Red3StoneModularNewCV extends LinearOpMode {
     final int UNDER_RED_BRIDGE_Y = -32;
 
     // parked position coordinates
-    final int PARKED_X = 4;
+    final int PARKED_X = 6;
     final int PARKED_Y = -22;
 
     // after gripping foundation, splines to this position to move foundation into building site
@@ -102,10 +102,10 @@ public class Red3StoneModularNewCV extends LinearOpMode {
     // dump position coordinates
     // far = close to wall, close = close to bridge
     final int DUMP_FAR_X = 68;
-    final int DUMP_MID_X = 65;
+    final int DUMP_MID_X = 61;
     final int DUMP_CLOSE_X = 60;
 
-    final int DUMP_FAR_Y = -25;
+    final int DUMP_FAR_Y = -24;
     final int DUMP_MID_Y = -25;
     final int DUMP_CLOSE_Y = -25;
 
@@ -142,7 +142,7 @@ public class Red3StoneModularNewCV extends LinearOpMode {
         phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);//remove this
 
         phoneCam.openCameraDevice();//open camera
-        phoneCam.setPipeline(new opencvSkystoneDetector.StageSwitchingPipeline());//different stages
+        phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
         phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_RIGHT);//display on RC
         //width, height
 
@@ -391,7 +391,7 @@ public class Red3StoneModularNewCV extends LinearOpMode {
                 drive.trajectoryBuilder()
                         .reverse() // reverse direction to move backwards
                         .lineTo(new Vector2d(FOUNDATION_END_X + 5, FOUNDATION_END_Y)) // drive backwards
-                        .strafeTo(new Vector2d(FOUNDATION_END_X + 5, PARKED_Y)) // strafe closer to bridge
+                        .strafeTo(new Vector2d(FOUNDATION_END_X + 3, PARKED_Y)) // strafe closer to bridge
                         .build()
         );
 
