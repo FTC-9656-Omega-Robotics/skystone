@@ -72,19 +72,19 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
     // NOTE: these coordinates should only be used in pairs (1-4, 2-5, 3-6) when running full auto paths
     // they may not actually represent where the skystones are; they're just coordinates that work
     // when tuning each of the 3 blue autonomous paths
-    final int SKYSTONE_1_X = -18;
-    final int SKYSTONE_2_X = -26;
-    final int SKYSTONE_3_X = -34;
-    final int SKYSTONE_4_X = -44;
+    final int SKYSTONE_1_X = -17;
+    final int SKYSTONE_2_X = -25;
+    final int SKYSTONE_3_X = -36;
+    final int SKYSTONE_4_X = -43;
     final int SKYSTONE_5_X = -52;
-    final int SKYSTONE_6_X = -60;
+    final int SKYSTONE_6_X = -62;
 
-    final int SKYSTONE_1_Y = 34;
-    final int SKYSTONE_2_Y = 33;
-    final int SKYSTONE_3_Y = 33;
-    final int SKYSTONE_4_Y = 38;
+    final int SKYSTONE_1_Y = 31;
+    final int SKYSTONE_2_Y = 32;
+    final int SKYSTONE_3_Y = 32;
+    final int SKYSTONE_4_Y = 36;
     final int SKYSTONE_5_Y = 36;
-    final int SKYSTONE_6_Y = 38;
+    final int SKYSTONE_6_Y = 36;
 
     // a bit of space between robot and neutral bridge
     final int UNDER_BLUE_BRIDGE_X = 0;
@@ -92,7 +92,7 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
 
     // parked position coordinates
     final int PARKED_X = 0;
-    final int PARKED_Y = 35;
+    final int PARKED_Y = 33;
 
     // after gripping foundation, splines to this position to move foundation into building site
     final int FOUNDATION_END_X = 30;
