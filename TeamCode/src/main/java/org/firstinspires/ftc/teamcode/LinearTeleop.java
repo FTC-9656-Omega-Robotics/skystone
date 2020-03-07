@@ -199,20 +199,19 @@ public class LinearTeleop extends LinearOpMode {
 
                 // open block gripper
                 robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
+                sleep(150);
+
+                // move arm up enough to outtake block using compliant wheel intake
+                armPos = OmegaBot.ARM_INIT - 100;
+                robot.arm.setTargetPosition(armPos);
+                robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                sleep(50);
 
                 // run outtakes
-                robot.leftIntake.setPower(.3);
-                robot.rightIntake.setPower(-.3);
+                robot.leftIntake.setPower(0.3);
+                robot.rightIntake.setPower(-0.3);
 
-                sleep(500);
-
-                // while outtaking, have arm at high enough position to outtake
                 while (gamepad2.right_trigger > .5) {
-                    // move arm up enough to outtake block using compliant wheel intake
-                    armPos = OmegaBot.ARM_INIT - 100;
-                    robot.arm.setTargetPosition(armPos);
-                    robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
                     // be able to drive while outtaking
                     drivetrainProcess();
                 }
@@ -243,7 +242,7 @@ public class LinearTeleop extends LinearOpMode {
             robot.arm.setTargetPosition(0);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setPower(armPower);
-            sleep(400);
+            sleep(150);
 
             // grip the block
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
