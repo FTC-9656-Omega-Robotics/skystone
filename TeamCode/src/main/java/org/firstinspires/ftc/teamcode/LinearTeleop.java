@@ -66,7 +66,11 @@ public class LinearTeleop extends LinearOpMode {
         if (gamepad2.right_bumper) {
             // opens block gripper
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
-            sleep(350);
+            ElapsedTime burger = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+            burger.startTime();
+            while(burger.milliseconds()<350){
+                drivetrainProcess();
+            }
 
             // only resets pickedUp if the block was outtaken by the arm
             // so that the drivers can outtake with compliant wheel intake
@@ -199,13 +203,15 @@ public class LinearTeleop extends LinearOpMode {
 
                 // open block gripper
                 robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
+                robot.leftIntake.setPower(-1);
+                robot.rightIntake.setPower(1);
                 sleep(150);
 
                 // move arm up enough to outtake block using compliant wheel intake
                 armPos = OmegaBot.ARM_INIT - 100;
                 robot.arm.setTargetPosition(armPos);
                 robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(50);
+                sleep(150);
 
                 // run outtakes
                 robot.leftIntake.setPower(0.3);
@@ -316,10 +322,10 @@ public class LinearTeleop extends LinearOpMode {
             robot.backLeft.setPower(-1);
             robot.backRight.setPower(1);
         } else { //otherwise joysticks
-            robot.frontLeft.setPower(front_left);
-            robot.frontRight.setPower(front_right);
-            robot.backLeft.setPower(rear_left);
-            robot.backRight.setPower(rear_right);
+            robot.frontLeft.setPower(front_left*front_left*front_left);
+            robot.frontRight.setPower(front_right*front_right*front_right);
+            robot.backLeft.setPower(rear_left*rear_left*rear_left);
+            robot.backRight.setPower(rear_right*rear_right*rear_right);
         }
     }
 }

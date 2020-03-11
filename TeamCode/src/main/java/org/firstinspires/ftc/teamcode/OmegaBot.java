@@ -67,7 +67,7 @@ public class OmegaBot {
     public static final double BLOCK_ROTATOR_STRAIGHT = 0.62; // STRAIGHT is position for using blockGripper to intake
     public static final double BLOCK_ROTATOR_ROTATED = 0.96; // rotated 90 degrees from STRAIGHT
 
-    public static final double BLOCK_GRIPPER_OPEN = 0.5;
+    public static final double BLOCK_GRIPPER_OPEN = 0.6;
     public static final double BLOCK_GRIPPER_CLOSED = 0.2;
 
     public static final double FOUNDATION_GRIPPER_UP = 0.55;
@@ -205,7 +205,7 @@ public class OmegaBot {
 
         foundationGripper.setPosition(FOUNDATION_GRIPPER_UP);
 
-        sideBackGripper.setPosition(SIDE_BACK_GRIPPER_STOWED);
+        sideBackGripper.setPosition(SIDE_BACK_GRIPPER_STOWED+.1);
         sideBackElbow.setPosition(SIDE_BACK_ELBOW_UP);
 
         sideFrontGripper.setPosition(SIDE_FRONT_GRIPPER_STOWED);

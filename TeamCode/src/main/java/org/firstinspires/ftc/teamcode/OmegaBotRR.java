@@ -37,7 +37,7 @@ public class OmegaBotRR{
     public DcMotor rightIntake;
 
     // arm position constants
-    public static final int ARM_INIT = -250;
+    public static final int ARM_INIT = -200;
     public static final int ARM_DOWN = -100;
     public static final int ARM_UP = -1400;
     public static final int ARM_TRAVELING = -210;
@@ -61,7 +61,7 @@ public class OmegaBotRR{
     public static final double BLOCK_ROTATOR_STRAIGHT = 0.62; // STRAIGHT is position for using blockGripper to intake
     public static final double BLOCK_ROTATOR_ROTATED = 0.96; // rotated 90 degrees from STRAIGHT
 
-    public static final double BLOCK_GRIPPER_OPEN = 0.5;
+    public static final double BLOCK_GRIPPER_OPEN = 0.6;
     public static final double BLOCK_GRIPPER_CLOSED = 0.2;
 
     public static final double FOUNDATION_GRIPPER_UP = 0.55;

@@ -286,7 +286,7 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
 
                             return Unit.INSTANCE;
                         })
-                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY)) // strafe to second skystone
+                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY-6)) // strafe to second skystone
                         .build()
         );
 
@@ -303,10 +303,10 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
                 drive.trajectoryBuilder()
                         .reverse() // reverse direction to go back to foundation
                         // move away from stones a bit so that the gripped stone doesn't hit the other ones when robot moves
-                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY + 3))
-                        .strafeTo(new Vector2d(UNDER_BLUE_BRIDGE_X, UNDER_BLUE_BRIDGE_Y - 4)) // strafe to under blue bridge (Y coordinate edited for alliance partner safety)
+                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY))
+                        .strafeTo(new Vector2d(UNDER_BLUE_BRIDGE_X, UNDER_BLUE_BRIDGE_Y - 12)) // strafe to under blue bridge (Y coordinate edited for alliance partner safety)
                         .splineTo(new Pose2d(DUMP_MID_X, DUMP_MID_Y, Math.toRadians(180))) // spline to middle dumping position
-                        .strafeTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y - 6)) // strafe closer to foundation
+                        .strafeTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y - 20)) // strafe closer to foundation
                         .build()
         );
 
@@ -376,7 +376,7 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .reverse() // reverse to back up
-                        .lineTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y - 12))
+                        .lineTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y - 25))
                         .build()
         );
 
@@ -406,7 +406,7 @@ public class Blue3StoneModularNewCV extends LinearOpMode {
         // park under blue bridge
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .strafeTo(new Vector2d(PARKED_X, PARKED_Y)) // strafe to parking position
+                        .strafeTo(new Vector2d(PARKED_X, PARKED_Y - 5)) // strafe to parking position
                         .build()
         );
     }

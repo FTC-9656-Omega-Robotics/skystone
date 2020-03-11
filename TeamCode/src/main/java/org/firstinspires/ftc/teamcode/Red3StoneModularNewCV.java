@@ -26,6 +26,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 @Autonomous (name = "Red 3 Stone Modular New CV")
 public class Red3StoneModularNewCV extends LinearOpMode {
@@ -77,7 +78,7 @@ public class Red3StoneModularNewCV extends LinearOpMode {
     final int SKYSTONE_3_X = -26;
     final int SKYSTONE_4_X = -38;
     final int SKYSTONE_5_X = -46;
-    final int SKYSTONE_6_X = -54;
+    final int SKYSTONE_6_X = -58;
 
     final int SKYSTONE_1_Y = -24;
     final int SKYSTONE_2_Y = -24;
@@ -235,7 +236,7 @@ public class Red3StoneModularNewCV extends LinearOpMode {
         final int BRIDGE_ANGLE = -5;
 
         // before moving, get side back elbow and gripper ready
-        robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
+        robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN+.07);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_READY);
 
         // set initial position
@@ -245,10 +246,12 @@ public class Red3StoneModularNewCV extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .strafeTo(new Vector2d(skystoneWallX, skystoneWallY)) // strafe to first skystone
+                        .strafeTo(new Vector2d(skystoneWallX, skystoneWallY))
                         .build()
         );
 
         // pick up first skystone
+        robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_DOWN);
         robot.sideBackGripper.setPosition(OmegaBotRR.SIDE_BACK_GRIPPER_CLOSED);
         sleep(700);
         robot.sideBackElbow.setPosition(OmegaBotRR.SIDE_BACK_ELBOW_UP);
@@ -284,7 +287,7 @@ public class Red3StoneModularNewCV extends LinearOpMode {
 
                             return Unit.INSTANCE;
                         })
-                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY)) // strafe to second skystone
+                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY+3)) // strafe to second skystone
                         .build()
         );
 
@@ -300,10 +303,10 @@ public class Red3StoneModularNewCV extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         // move away from stones a bit so that the gripped stone doesn't hit the other ones when robot moves
-                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY - 3))
-                        .strafeTo(new Vector2d(UNDER_RED_BRIDGE_X, UNDER_RED_BRIDGE_Y)) // strafe to under red bridge
+                        .strafeTo(new Vector2d(skystoneBridgeX, skystoneBridgeY - 3)) // used to be -3 (subtracted 4 to account for correction)
+                        .strafeTo(new Vector2d(UNDER_RED_BRIDGE_X, UNDER_RED_BRIDGE_Y + 3)) // strafe to under red bridge
                         .splineTo(new Pose2d(DUMP_MID_X, DUMP_MID_Y, 0)) // spline to middle dumping position
-                        .strafeTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y + 6)) // strafe closer to foundation (to left)
+                        .strafeTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y + 12)) // strafe closer to foundation (to left)
                         .build()
         );
 
@@ -366,7 +369,7 @@ public class Red3StoneModularNewCV extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .reverse() // reverse to back up
-                        .lineTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y + 12))
+                        .lineTo(new Vector2d(DUMP_MID_X, DUMP_MID_Y + 15))
                         .build()
         );
 
