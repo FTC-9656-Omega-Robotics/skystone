@@ -68,7 +68,7 @@ public class LinearTeleop extends LinearOpMode {
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
             ElapsedTime burger = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
             burger.startTime();
-            while(burger.milliseconds()<350){
+            while(burger.milliseconds()<500){
                 drivetrainProcess();
             }
 
@@ -79,7 +79,11 @@ public class LinearTeleop extends LinearOpMode {
                 armPos = OmegaBot.ARM_INIT;
                 robot.arm.setTargetPosition(armPos);
                 robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(500);
+                burger.reset();
+                burger.startTime();
+                while(burger.milliseconds()<500){
+                    drivetrainProcess();
+                }
 
                 pickedUp = false;
                 armMovedBack = false;
@@ -139,7 +143,11 @@ public class LinearTeleop extends LinearOpMode {
 
         if (grabbingBlock) {
             // sleep so that blockGripper can actually open then close
-            sleep(1500);
+            ElapsedTime burger = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+            burger.startTime();
+            while(burger.milliseconds()<1500){
+                drivetrainProcess();
+            }
 
             // intake stone with gripper
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
@@ -205,22 +213,25 @@ public class LinearTeleop extends LinearOpMode {
                 robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_OPEN);
                 robot.leftIntake.setPower(-1);
                 robot.rightIntake.setPower(1);
-                sleep(150);
+                ElapsedTime burger = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+                burger.startTime();
+                while(burger.milliseconds()<150){
+                    drivetrainProcess();
+                }
 
                 // move arm up enough to outtake block using compliant wheel intake
-                armPos = OmegaBot.ARM_INIT - 100;
+                armPos = OmegaBot.ARM_INIT - 200;
                 robot.arm.setTargetPosition(armPos);
                 robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(150);
+                burger.reset();
+                burger.startTime();
+                while(burger.milliseconds()<150){
+                    drivetrainProcess();
+                }
 
                 // run outtakes
                 robot.leftIntake.setPower(0.3);
                 robot.rightIntake.setPower(-0.3);
-
-                while (gamepad2.right_trigger > .5) {
-                    // be able to drive while outtaking
-                    drivetrainProcess();
-                }
 
                 // move arm back down
                 armPos = OmegaBot.ARM_TRAVELING;
@@ -242,17 +253,29 @@ public class LinearTeleop extends LinearOpMode {
 
             // open block gripper just in case
             robot.blockGripper.setPosition(OmegaBotRR.BLOCK_GRIPPER_OPEN);
-            sleep(150);
+            ElapsedTime burger = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+            burger.startTime();
+            while(burger.milliseconds()<150){
+                drivetrainProcess();
+            }
 
             // move arm down to intake block
             robot.arm.setTargetPosition(0);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setPower(armPower);
-            sleep(150);
+            burger.reset();
+            burger.startTime();
+            while(burger.milliseconds()<150){
+                drivetrainProcess();
+            }
 
             // grip the block
             robot.blockGripper.setPosition(OmegaBot.BLOCK_GRIPPER_CLOSED);
-            sleep(150);
+            burger.reset();
+            burger.startTime();
+            while(burger.milliseconds()<150){
+                drivetrainProcess();
+            }
 
             // move arm to traveling (init) position
             armPos = OmegaBot.ARM_TRAVELING;
